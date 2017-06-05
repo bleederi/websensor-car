@@ -33,14 +33,14 @@ var sensors = {};
 var accel = {x:null, y:null, z:null};
 //var accelNoG;
 var velGyro;
-var sensorfreq = 60;    //for setting desired sensor frequency
+var sensorfreq = 30;    //for setting desired sensor frequency
 
-//var textUpdate = setInterval(update_text, 1000/sensorfreq);
+var textUpdate = setInterval(update_text, 1000/sensorfreq);
 
 canvas = document.getElementById("canvas");
 context = canvas.getContext("2d");
 car = new Image();
-car.src = "http://i.imgur.com/uwApbV7.png";
+car.src = "https://i.imgur.com/uwApbV7.png";
 
 window.addEventListener("keydown", keypress_handler, false);
 window.addEventListener("keyup", keyup_handler, false);
