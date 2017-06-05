@@ -35,7 +35,7 @@ var accel = {x:null, y:null, z:null};
 var velGyro;
 var sensorfreq = 60;    //for setting desired sensor frequency
 
-var textUpdate = setInterval(update_text, 1000/sensorfreq);
+//var textUpdate = setInterval(update_text, 1000/sensorfreq);
 
 canvas = document.getElementById("canvas");
 context = canvas.getContext("2d");
