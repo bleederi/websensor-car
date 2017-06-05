@@ -28,7 +28,11 @@ mod = 0;
 
 var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //orientation
 var angles = {alpha:null, beta:null, gamma:null};
+var oangles = {alpha:null, beta:null, gamma:null};      //Original angles, represent the original orientation
 var sensors = {};
+var accel = {x:null, y:null, z:null};
+//var accelNoG;
+var velGyro;
 var sensorfreq = 60;    //for setting desired sensor frequency
 
 canvas = document.getElementById("canvas");
@@ -103,8 +107,35 @@ function convert_orientation(orimatrix) {        //Convert orientation matrix to
         return angles;  //from -pi to pi
 }
 
+function update_text()
+{
+if (accel && orientationMat && velGyro)  //only update if all data available
+        {
+                        document.getElementById("accl").textContent = `Acceleration ${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: ${magnitude(accel).toFixed(3)}`;
+                        //document.getElementById("accl_nog").textContent = `Acceleration without gravity ${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: ${magnitude(accelNoG).toFixed(3)}`;
+                        //document.getElementById("g_accl").textContent = `Isolated gravity ${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
+                        document.getElementById("ori").textContent = `Orientation matrix ${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]} ...`;
+                        document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: ${magnitude(velGyro).toFixed(3)}`;
+                        document.getElementById("sensorfreq").textContent = `Sensor frequency ${sensorfreq}`;
+        }
+}
+
 function startSensors() {
         try {
+        //Accelerometer including gravity
+        accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
+        sensors.Accelerometer = accelerometer;
+        //gravity =  new LowPassFilterData(accelerometer, 0.8);
+        accelerometer.onchange = event => {
+                accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
+                //gravity.update(accel);
+                //accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
+        }
+        accelerometer.onerror = err => {
+          accelerometer = null;
+          console.log(`Accelerometer ${err.error}`)
+        }
+        accelerometer.start();
         //AbsoluteOrientationSensor
         absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
@@ -112,13 +143,31 @@ function startSensors() {
                 absoluteorientationsensor.populateMatrix(orientationMat);
                 angles = convert_orientation(orientationMat);
                 //console.log(angles);
+                //We need the original orientation for the turning to be orientation-independent
+                if(oangles.alpha == null && oangles.beta == null && oangles.gamme == null)
+                {
+                        oangles = angles;
+                }
         }
         absoluteorientationsensor.onerror = err => {
           absoluteorientationsensor = null;
           console.log(`Absolute orientation sensor ${err.error}`)
         };
         absoluteorientationsensor.start();
+        //Gyroscope
+        gyroscope = new Gyroscope({ frequency: sensorfreq});
+        sensors.Gyroscope = gyroscope;
+        gyroscope.onchange = event => {
+                velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
+        }
+        gyroscope.onerror = err => {
+          gyroscope = null;
+          console.log(`Gyroscope ${err.error}`)
+        };
+        gyroscope.start();
         } catch(err) { console.log(err); }
         sensors_started = true;
         return sensors;
         }
+
+startSensors();
