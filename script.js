@@ -109,6 +109,11 @@ function convert_orientation(orimatrix) {        //Convert orientation matrix to
         return angles;  //from -pi to pi
 }
 
+function magnitude(vector)      //Calculate the magnitude of a vector
+{
+return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+}
+
 function update_text()
 {
 if (accel && orientationMat && velGyro)  //only update if all data available
