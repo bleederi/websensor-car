@@ -32,6 +32,9 @@ var force_div = document.getElementById("force");
 var ut; //debug text update var
 var mv; //movement update var
 
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
 var latitude = null;
 var longitude = null;
 const GRAVITY = 9.81;
@@ -48,6 +51,8 @@ var yaw = null;
 
 var direction = null;
 var force = null;
+
+var ballRadius = 5;
 
 //Rendering vars (Three.JS)
 var scene = null;
@@ -182,6 +187,14 @@ function move() //Moves the car
         }
 }
 
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+}
+
 //The custom element where the game will be rendered
 customElements.define("game-view", class extends HTMLElement {
         constructor() {
@@ -236,6 +249,7 @@ customElements.define("game-view", class extends HTMLElement {
         render() {
                 direction = getDirection(roll, pitch, yaw, mode);
                 force = getForce(roll, pitch, yaw, mode);
+                drawBall();
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
