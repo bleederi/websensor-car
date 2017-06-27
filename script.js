@@ -33,6 +33,9 @@ var ut; //debug text update var
 var mv; //movement update var
 
 var canvas = document.getElementById("canvas");
+//resize canvas to fullscreen
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 var ctx = canvas.getContext("2d");
 
 var latitude = null;
