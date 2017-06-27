@@ -76,6 +76,13 @@ var mod = 0;
 
 var fps           = 60;
 var step          = 1/fps;                   // length of each frame in seconds
+var segments = [];      //List of the parts of the road (segments)
+var segmentLength = 100;    //Segment length in pixels
+var roadWidth = 400;    //Road width in pixels
+var rumbleLength = 5;   //Length of a "rumble"
+
+//Camera vars
+var cameraHeight = 1000;    
 
 //Sensor classes and low-pass filter
 class AbsOriSensor {
@@ -205,9 +212,14 @@ function drawCar()
 
 function drawRoad()
 {
-        //TODO: Draw a curvy, random road 
+        //TODO: Draw a curvy, random road
         for(let i=0; i<canvas.height; i = i + roadblockHeight/20)
         {
+        //Draw a rumble
+        for (let j=0; j<rumbleLength; j++)
+        {
+            //But how?   
+        }
                 let xc = (i/8)*(roadblockWidthInitial/200);
                 ctx.beginPath();
                 ctx.rect(canvas.width/2-xc,i,2*xc,roadblockHeight);

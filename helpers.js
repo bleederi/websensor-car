@@ -17,6 +17,7 @@
  * limitations under the License.
 
 */
+
 var Rendering = {
 
     //Draw a polygon
@@ -35,6 +36,6 @@ var Rendering = {
     //Render a part (segment) of the road
     segment: function(ctx, width) 
     {
-
+        //TODO
     }
 }
