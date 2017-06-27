@@ -47,7 +47,7 @@ var sensorfreq = 60;
 var orientation_sensor = null;
 
 var mode = "portrait";
-var nosensors = 0;      //Flag for testing without sensors
+var nosensors = 1;      //Flag for testing without sensors
 
 var roll = null;
 var pitch = null;
@@ -241,19 +241,20 @@ function keyup_handler(event) {
 
 function keypress_handler(event) {
     console.log(event.keyCode);
-    if (event.keyCode == 87) {
-        mod = 1;
-    }
-    if (event.keyCode == 83) {
-        mod = -1;
-    }
-    if (event.keyCode == 65) {
-        angle -= 5;
+    if (event.keyCode == 65) {  //A
+        direction = "left";
     }
     if (event.keyCode == 68) {
-        angle += 5;
+        direction = "right";
     }
 }
+
+function updateNS()       //Update vars, move the car accordingly (no sensors)
+{
+                force = 5;
+                move();
+}
+
 
 //The custom element where the game will be rendered
 customElements.define("game-view", class extends HTMLElement {
@@ -304,8 +305,7 @@ customElements.define("game-view", class extends HTMLElement {
                 //place car
                 x = canvas.width/2;
                 y = canvas.height - ballRadius;
-                buildRoad();
-                console.log(segments);
+                //buildRoad();
                 this.render();
                 if(!nosensors)
                 {
@@ -314,18 +314,16 @@ customElements.define("game-view", class extends HTMLElement {
                 }
                 else
                 {
+                        mv = setInterval(updateNS, 100);
                         window.addEventListener("keydown", keypress_handler, false);
                         window.addEventListener("keyup", keyup_handler, false);
                 }
         }
 
         render() {
-                var baseSegment = findSegment(position);
-                var maxy        = height;
-                var n, segment;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 //Need to draw road before the car                
-                //drawRoad();
+                drawRoad();
                 drawCar();
                 // Render loop
                 this.renderer.render(scene, this.camera);
