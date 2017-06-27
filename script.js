@@ -47,6 +47,7 @@ var sensorfreq = 60;
 var orientation_sensor = null;
 
 var mode = "portrait";
+var nosensors = 0;      //Flag for testing without sensors
 
 var roll = null;
 var pitch = null;
@@ -74,6 +75,9 @@ var y = 0;      //car y coordinate
 var speed = 5;
 var angle = 0;
 var mod = 0;
+
+var fps           = 60;
+var step          = 1/fps;                   // length of each frame in seconds
 
 //Sensor classes and low-pass filter
 class AbsOriSensor {
@@ -227,6 +231,30 @@ function update()       //Update vars, move the car accordingly
                 force = getForce(roll, pitch, yaw, mode);
                 move();
 }
+
+/*      Functions related to testing without sensors      */
+function keyup_handler(event) {
+    if (event.keyCode == 87 || event.keyCode == 83) {
+        mod = 0;
+    }
+}
+
+function keypress_handler(event) {
+    console.log(event.keyCode);
+    if (event.keyCode == 87) {
+        mod = 1;
+    }
+    if (event.keyCode == 83) {
+        mod = -1;
+    }
+    if (event.keyCode == 65) {
+        angle -= 5;
+    }
+    if (event.keyCode == 68) {
+        angle += 5;
+    }
+}
+
 //The custom element where the game will be rendered
 customElements.define("game-view", class extends HTMLElement {
         constructor() {
@@ -273,18 +301,31 @@ customElements.define("game-view", class extends HTMLElement {
                         console.log("Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags.");
                         this.innerHTML = "Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags";
                 }
-                this.render();
-                ut = setInterval(updateText, 1000);
-                mv = setInterval(update, 100);
                 //place car
                 x = canvas.width/2;
                 y = canvas.height - ballRadius;
+                buildRoad();
+                console.log(segments);
+                this.render();
+                if(!nosensors)
+                {
+                        ut = setInterval(updateText, 1000);
+                        mv = setInterval(update, 100);
+                }
+                else
+                {
+                        window.addEventListener("keydown", keypress_handler, false);
+                        window.addEventListener("keyup", keyup_handler, false);
+                }
         }
 
         render() {
+                var baseSegment = findSegment(position);
+                var maxy        = height;
+                var n, segment;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 //Need to draw road before the car                
-                drawRoad();
+                //drawRoad();
                 drawCar();
                 // Render loop
                 this.renderer.render(scene, this.camera);
