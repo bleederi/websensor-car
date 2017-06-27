@@ -22,11 +22,20 @@ Code from http://ucfcdl.github.io/html5-tutorial/ has been used in creating this
 'use strict';
 
 /* Globals */
+var roll_div = document.getElementById("roll");
+var pitch_div = document.getElementById("pitch");
+var yaw_div = document.getElementById("yaw");
+var ut; //debug text update var
+
 var latitude = null;
 var longitude = null;
 const GRAVITY = 9.81;
 var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //device orientation
 var sensorfreq = 60;
+
+var roll = null;
+var pitch = null;
+var yaw = null;
 
 //Rendering vars (Three.JS)
 var scene = null;
@@ -43,13 +52,6 @@ var y = 0;
 var speed = 5;
 var angle = 0;
 var mod = 0;
-
-var angles = {alpha:null, beta:null, gamma:null};
-var oangles = {alpha:null, beta:null, gamma:null};      //Original angles, represent the original orientation
-var sensors = {};
-var accel = {x:null, y:null, z:null};
-//var accelNoG;
-var velGyro;
 
 //var textUpdate = setInterval(update_text, 1000/sensorfreq);
 
@@ -107,6 +109,13 @@ function toEulerianAngle(quat, out)
         return out;
 }
 
+function updateText()   //For updating debug text
+{
+        roll_div.innerHTML = roll;
+        pitch_div.innerHTML = pitch;
+        yaw_div.innerHTML = yaw;
+}
+
 //The custom element where the game will be rendered
 customElements.define("game-view", class extends HTMLElement {
         constructor() {
@@ -140,9 +149,9 @@ customElements.define("game-view", class extends HTMLElement {
                 //Initialize sensors
                 orientation_sensor = new AbsOriSensor();
                 orientation_sensor.onchange = () => {
-                        this.roll = orientation_sensor.roll;
-                        this.pitch = orientation_sensor.pitch;
-                        this.yaw = orientation_sensor.yaw;
+                        roll = orientation_sensor.roll;
+                        pitch = orientation_sensor.pitch;
+                        yaw = orientation_sensor.yaw;
                 };
                 orientation_sensor.onactivate = () => {
                 };
@@ -154,6 +163,7 @@ customElements.define("game-view", class extends HTMLElement {
                         this.innerHTML = "Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags";
                 }
                 this.render();
+                ut = setInterval(updateText, 1000);
         }
 
         render() {
