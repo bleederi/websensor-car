@@ -42,6 +42,7 @@ var pitch = null;
 var yaw = null;
 
 var direction = null;
+var force = null;
 
 //Rendering vars (Three.JS)
 var scene = null;
@@ -119,6 +120,7 @@ function updateText()   //For updating debug text
         pitch_div.innerHTML = pitch;
         yaw_div.innerHTML = yaw;
         direction_div.innerHTML = direction;
+        force_div.innerHTML = force;
 }
 
 function getDirection(roll, pitch, yaw)    //Returns the direction the car is turning towards
@@ -132,6 +134,19 @@ function getDirection(roll, pitch, yaw)    //Returns the direction the car is tu
                 direction = "right";
         }
         return direction;
+}
+
+function getForce(roll, pitch, yaw)    //Returns the force the car will be turning with
+{
+        if(pitch < 0)
+        {       
+                force = -pitch;
+        }
+        else
+        {
+                force = pitch;
+        }
+        return force;
 }
 
 //The custom element where the game will be rendered
@@ -186,6 +201,7 @@ customElements.define("game-view", class extends HTMLElement {
 
         render() {
                 direction = getDirection(roll, pitch, yaw);
+                force = getForce(roll, pitch, yaw);
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
