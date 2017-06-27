@@ -123,7 +123,7 @@ function updateText()   //For updating debug text
 
 function getDirection(roll, pitch, yaw)    //Returns the direction the car is turning towards
 {
-        if(pitch > 0)
+        if(pitch < 0)
         {       
                 direction = "left";
         }
