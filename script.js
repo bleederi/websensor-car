@@ -249,6 +249,7 @@ customElements.define("game-view", class extends HTMLElement {
         render() {
                 direction = getDirection(roll, pitch, yaw, mode);
                 force = getForce(roll, pitch, yaw, mode);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 drawBall();
                 // Render loop
                 this.renderer.render(scene, this.camera);
