@@ -14,36 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-        <meta charset="UTF-8" />
-        <meta name="viewpor t" content="width=device-width, initial-scale=0.6">
-        <link rel="manifest" href="manifest.json" />
-	<style>
-		body{
-			margin: 0;
-		}
-		canvas{
-			width: 100%;
-			height: 100%
-		}
-	</style>
-	<script src="three.min.js"></script>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=0.6">
+                <link rel="manifest" href="manifest.json" />
+                <meta charset="utf-8">
+                <meta name="viewport" content="user-scalable=no, initial-scale=1">
+                <title>Websensor car demo</title>
+		<style>
+			body{
+				margin: 0;
+			}
+		</style>
 </head>
 <body>
         <canvas id="canvas" width="800" height="800">
         This text is displayed if your browser does not support HTML5 Canvas.
         </canvas>
 
-        <p id="bstate">Button state</p>
-        <p id="accl">Acceleration</p>
-        <p id="g_accl">Gravity</p>
-        <p id="accl_nog">Acceleration without gravity</p>
-        <p id="ori">Orientation</p>
-        <p id="rrate">Rotation rate</p>
-        <p id="sensorfreq">Sensor frequency</p>
-
-        <script type="text/javascript" src="script.js"></script>
+        <div hidden id="debug">
+        </div>
+        <game-view id="gameview">
+        </game-view>
+        <script src="three.min.js"></script>
+        <script type="text/javascript" src="script.js"></script>        <!-- Contains the JS -->
 </body>
 
 </html>

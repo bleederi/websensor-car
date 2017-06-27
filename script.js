@@ -19,24 +19,153 @@
 
 Code from http://ucfcdl.github.io/html5-tutorial/ has been used in creating this demo
 */
+'use strict';
 
-x = 0;
-y = 0;
-speed = 5;
-angle = 0;
-mod = 0;
+/* Globals */
+var latitude = null;
+var longitude = null;
+const GRAVITY = 9.81;
+var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //device orientation
+var sensorfreq = 60;
 
-var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //orientation
+//Rendering vars (Three.JS)
+var scene = null;
+var sphere = null;
+var video = null;
+var videoF = null;
+var videoB = null;
+var videoTexture = null;
+var sphereMaterial = null;
+var sphereMesh = null;
+
+var x = 0;
+var y = 0;
+var speed = 5;
+var angle = 0;
+var mod = 0;
+
 var angles = {alpha:null, beta:null, gamma:null};
 var oangles = {alpha:null, beta:null, gamma:null};      //Original angles, represent the original orientation
 var sensors = {};
 var accel = {x:null, y:null, z:null};
 //var accelNoG;
 var velGyro;
-var sensorfreq = 30;    //for setting desired sensor frequency
 
-var textUpdate = setInterval(update_text, 1000/sensorfreq);
+//var textUpdate = setInterval(update_text, 1000/sensorfreq);
 
+//Sensor classes and low-pass filter
+class AbsOriSensor {
+        constructor() {
+        const sensor = new AbsoluteOrientationSensor({ frequency: sensorfreq });
+        const mat4 = new Float32Array(16);
+        const euler = new Float32Array(3);
+        sensor.onchange = () => {
+                sensor.populateMatrix(mat4);
+                toEulerianAngle(sensor.quaternion, euler);      //From quaternion to Eulerian angles
+                this.roll = euler[0];
+                this.pitch = euler[1];
+                this.yaw = euler[2];
+                if (this.onchange) this.onchange();
+        };
+        sensor.onactivate = () => {
+                if (this.onactivate) this.onactivate();
+        };
+        const start = () => sensor.start();
+        Object.assign(this, { start });
+        }
+}
+class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
+  constructor(reading, bias) {
+    Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
+    this.bias = bias;
+  }
+        update(reading) {
+                this.x = this.x * this.bias + reading.x * (1 - this.bias);
+                this.y = this.y * this.bias + reading.y * (1 - this.bias);
+                this.z = this.z * this.bias + reading.z * (1 - this.bias);
+        }
+}
+
+//WINDOWS 10 HAS DIFFERENT CONVENTION: Yaw z, pitch x, roll y
+function toEulerianAngle(quat, out)
+{
+        const ysqr = quat[1] ** 2;
+
+        // Roll (x-axis rotation).
+        const t0 = 2 * (quat[3] * quat[0] + quat[1] * quat[2]);
+        const t1 = 1 - 2 * (ysqr + quat[0] ** 2);
+        out[0] = Math.atan2(t0, t1);
+        // Pitch (y-axis rotation).
+        let t2 = 2 * (quat[3] * quat[1] - quat[2] * quat[0]);
+        t2 = t2 > 1 ? 1 : t2;
+        t2 = t2 < -1 ? -1 : t2;
+        out[1] = Math.asin(t2);
+        // Yaw (z-axis rotation).
+        const t3 = 2 * (quat[3] * quat[2] + quat[0] * quat[1]);
+        const t4 = 1 - 2 * (ysqr + quat[2] ** 2);
+        out[2] = Math.atan2(t3, t4);
+        return out;
+}
+
+//The custom element where the game will be rendered
+customElements.define("game-view", class extends HTMLElement {
+        constructor() {
+        super();
+
+        //THREE.js render stuff
+        this.renderer = new THREE.WebGLRenderer();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(this.renderer.domElement);
+
+        scene = new THREE.Scene();
+
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+        this.camera.target = new THREE.Vector3(0, 0, 0);
+
+        sphere = new THREE.SphereGeometry(100, 100, 40);
+        sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
+
+        //videoTexture = new THREE.Texture(video);
+        //videoTexture.minFilter = THREE.LinearFilter;
+        //videoTexture.magFilter = THREE.LinearFilter;
+        //videoTexture.format = THREE.RGBFormat;
+
+        //sphereMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, overdraw: 0.5 } );
+        //sphereMesh = new THREE.Mesh(sphere, sphereMaterial);
+        //scene.add(sphereMesh);
+        }
+
+        connectedCallback() {
+                try {
+                //Initialize sensors
+                orientation_sensor = new AbsOriSensor();
+                orientation_sensor.onchange = () => {
+                        this.roll = orientation_sensor.roll;
+                        this.pitch = orientation_sensor.pitch;
+                        this.yaw = orientation_sensor.yaw;
+                };
+                orientation_sensor.onactivate = () => {
+                };
+                orientation_sensor.start();
+                }
+                catch(err) {
+                        console.log(err.message);
+                        console.log("Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags.");
+                        this.innerHTML = "Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags";
+                }
+                this.render();
+        }
+
+        render() {
+
+                // Render loop
+                this.renderer.render(scene, this.camera);
+                requestAnimationFrame(() => this.render());
+        }
+
+});
+
+/*
 canvas = document.getElementById("canvas");
 context = canvas.getContext("2d");
 car = new Image();
@@ -109,72 +238,9 @@ function convert_orientation(orimatrix) {        //Convert orientation matrix to
         return angles;  //from -pi to pi
 }
 
+*/
+
 function magnitude(vector)      //Calculate the magnitude of a vector
 {
 return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
-
-function update_text()
-{
-if (accel && orientationMat && velGyro)  //only update if all data available
-        {
-                        document.getElementById("accl").textContent = `Acceleration ${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: ${magnitude(accel).toFixed(3)}`;
-                        //document.getElementById("accl_nog").textContent = `Acceleration without gravity ${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: ${magnitude(accelNoG).toFixed(3)}`;
-                        //document.getElementById("g_accl").textContent = `Isolated gravity ${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
-                        document.getElementById("ori").textContent = `Orientation matrix ${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]} ...`;
-                        document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: ${magnitude(velGyro).toFixed(3)}`;
-                        document.getElementById("sensorfreq").textContent = `Sensor frequency ${sensorfreq}`;
-        }
-}
-
-function startSensors() {
-        try {
-        //Accelerometer including gravity
-        accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
-        sensors.Accelerometer = accelerometer;
-        //gravity =  new LowPassFilterData(accelerometer, 0.8);
-        accelerometer.onchange = event => {
-                accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
-                //gravity.update(accel);
-                //accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-        }
-        accelerometer.onerror = err => {
-          accelerometer = null;
-          console.log(`Accelerometer ${err.error}`)
-        }
-        accelerometer.start();
-        //AbsoluteOrientationSensor
-        absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
-        sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
-        absoluteorientationsensor.onchange = event => {
-                absoluteorientationsensor.populateMatrix(orientationMat);
-                angles = convert_orientation(orientationMat);
-                //console.log(angles);
-                //We need the original orientation for the turning to be orientation-independent
-                if(oangles.alpha == null && oangles.beta == null && oangles.gamme == null)
-                {
-                        oangles = angles;
-                }
-        }
-        absoluteorientationsensor.onerror = err => {
-          absoluteorientationsensor = null;
-          console.log(`Absolute orientation sensor ${err.error}`)
-        };
-        absoluteorientationsensor.start();
-        //Gyroscope
-        gyroscope = new Gyroscope({ frequency: sensorfreq});
-        sensors.Gyroscope = gyroscope;
-        gyroscope.onchange = event => {
-                velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
-        }
-        gyroscope.onerror = err => {
-          gyroscope = null;
-          console.log(`Gyroscope ${err.error}`)
-        };
-        gyroscope.start();
-        } catch(err) { console.log(err); }
-        sensors_started = true;
-        return sensors;
-        }
-
-startSensors();
