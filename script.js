@@ -25,6 +25,8 @@ Code from http://ucfcdl.github.io/html5-tutorial/ has been used in creating this
 var roll_div = document.getElementById("roll");
 var pitch_div = document.getElementById("pitch");
 var yaw_div = document.getElementById("yaw");
+var direction_div = document.getElementById("direction");
+var force_div = document.getElementById("force");
 var ut; //debug text update var
 
 var latitude = null;
@@ -38,6 +40,8 @@ var orientation_sensor = null;
 var roll = null;
 var pitch = null;
 var yaw = null;
+
+var direction = null;
 
 //Rendering vars (Three.JS)
 var scene = null;
@@ -114,6 +118,20 @@ function updateText()   //For updating debug text
         roll_div.innerHTML = roll;
         pitch_div.innerHTML = pitch;
         yaw_div.innerHTML = yaw;
+        direction_div.innerHTML = direction;
+}
+
+function getDirection(roll, pitch, yaw)    //Returns the direction the car is turning towards
+{
+        if(pitch > 0)
+        {       
+                direction = "left";
+        }
+        else
+        {
+                direction = "right";
+        }
+        return direction;
 }
 
 //The custom element where the game will be rendered
@@ -167,7 +185,7 @@ customElements.define("game-view", class extends HTMLElement {
         }
 
         render() {
-
+                direction = getDirection(roll, pitch, yaw);
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
