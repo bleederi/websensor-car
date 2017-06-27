@@ -132,7 +132,7 @@ function updateText()   //For updating debug text
 
 function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direction the car is turning towards
 {
-        if(mode="landscape")
+        if(mode == "landscape")
         {
                 direction = "todo";
         }
@@ -152,7 +152,7 @@ function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direc
 
 function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the car will be turning with
 {
-        if(mode="landscape")
+        if(mode == "landscape")
         {
                 direction = "todo";
         }
@@ -172,11 +172,11 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
 
 function move() //Moves the car
 {
-        if(direction === "left")
+        if(direction == "left")
         {
                 x = x - force;
         }
-        else if (direction === "right")
+        else if (direction == "right")
         {
                 x = x + force;
         }
