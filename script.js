@@ -203,7 +203,7 @@ function drawCar()
 function drawRoad()
 {
         //TODO: Draw a curvy, random road 
-        for(let i=0; i<canvas.height; i = i + roadblockHeight/2)
+        for(let i=0; i<canvas.height; i = i + roadblockHeight/20)
         {
                 let xc = i/8;
                 ctx.beginPath();
