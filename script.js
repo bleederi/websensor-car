@@ -206,7 +206,7 @@ function drawRoad()
         //TODO: Draw a curvy, random road 
         for(let i=0; i<canvas.height; i = i + roadblockHeight/20)
         {
-                let xc = (i/8)*(roadBlockWidthInitial/200);
+                let xc = (i/8)*(roadblockWidthInitial/200);
                 ctx.beginPath();
                 ctx.rect(canvas.width/2-xc,i,2*xc,roadblockHeight);
                 ctx.fillStyle = "grey";
