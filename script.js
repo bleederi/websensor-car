@@ -22,12 +22,15 @@ Code from http://ucfcdl.github.io/html5-tutorial/ has been used in creating this
 'use strict';
 
 /* Globals */
+var xcoord_div = document.getElementById("xcoord");
+var ycoord_div = document.getElementById("ycoord");
 var roll_div = document.getElementById("roll");
 var pitch_div = document.getElementById("pitch");
 var yaw_div = document.getElementById("yaw");
 var direction_div = document.getElementById("direction");
 var force_div = document.getElementById("force");
 var ut; //debug text update var
+var mv; //movement update var
 
 var latitude = null;
 var longitude = null;
@@ -56,8 +59,8 @@ var videoTexture = null;
 var sphereMaterial = null;
 var sphereMesh = null;
 
-var x = 0;
-var y = 0;
+var x = 0;      //car x coordinate
+var y = 0;      //car y coordinate
 var speed = 5;
 var angle = 0;
 var mod = 0;
@@ -123,6 +126,8 @@ function updateText()   //For updating debug text
         yaw_div.innerHTML = yaw;
         direction_div.innerHTML = direction;
         force_div.innerHTML = force;
+        xcoord_div.innerHTML = x;
+        ycoord_div.innerHTML = y;
 }
 
 function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direction the car is turning towards
@@ -163,6 +168,18 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
                 }
         }
         return force;
+}
+
+function move() //Moves the car
+{
+        if(direction === "left")
+        {
+                x = x - force;
+        }
+        else if (direction === "right")
+        {
+                x = x + force;
+        }
 }
 
 //The custom element where the game will be rendered
@@ -213,6 +230,7 @@ customElements.define("game-view", class extends HTMLElement {
                 }
                 this.render();
                 ut = setInterval(updateText, 1000);
+                mv = setInterval(move, 100);
         }
 
         render() {
