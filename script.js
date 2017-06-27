@@ -37,6 +37,8 @@ var sensorfreq = 60;
 
 var orientation_sensor = null;
 
+var mode = "portrait";
+
 var roll = null;
 var pitch = null;
 var yaw = null;
@@ -123,28 +125,42 @@ function updateText()   //For updating debug text
         force_div.innerHTML = force;
 }
 
-function getDirection(roll, pitch, yaw)    //Returns the direction the car is turning towards
+function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direction the car is turning towards
 {
-        if(pitch < 0)
-        {       
-                direction = "left";
+        if(mode="landscape")
+        {
+                direction = "todo";
         }
         else
         {
-                direction = "right";
+                if(pitch < 0)
+                {       
+                        direction = "left";
+                }
+                else
+                {
+                        direction = "right";
+                }
         }
         return direction;
 }
 
-function getForce(roll, pitch, yaw)    //Returns the force the car will be turning with
+function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the car will be turning with
 {
-        if(pitch < 0)
-        {       
-                force = -pitch;
+        if(mode="landscape")
+        {
+                direction = "todo";
         }
         else
         {
-                force = pitch;
+                if(pitch < 0)
+                {       
+                        force = -pitch;
+                }
+                else
+                {
+                        force = pitch;
+                }
         }
         return force;
 }
@@ -200,8 +216,8 @@ customElements.define("game-view", class extends HTMLElement {
         }
 
         render() {
-                direction = getDirection(roll, pitch, yaw);
-                force = getForce(roll, pitch, yaw);
+                direction = getDirection(roll, pitch, yaw, mode);
+                force = getForce(roll, pitch, yaw, mode);
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
