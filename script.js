@@ -79,7 +79,7 @@ var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 100;    //Segment length in pixels
 var roadWidth = 400;    //Road width in pixels
-var rumbleLength = 5;   //Length of a "rumble"
+var rumbleLength = 3;   //Length of a "rumble"
 
 //Camera vars
 var cameraHeight = 1000;    
@@ -223,7 +223,14 @@ function drawRoad()
                 let xc = (i/8)*(roadblockWidthInitial/200);
                 ctx.beginPath();
                 ctx.rect(canvas.width/2-xc,i,2*xc,roadblockHeight);
-                ctx.fillStyle = "grey";
+                if(i%rumbleLength === 0)
+                {
+                    ctx.fillStyle = "black";
+                }
+                else
+                {
+                    ctx.fillStyle = "grey";
+                }                
                 ctx.fill();
                 ctx.closePath();
         }
