@@ -198,11 +198,12 @@ function drawCar() {
 
 function drawRoad()
 {
-        for(let i=0; i<canvas.height; i = i + roadblockHeight)
+        for(let i=0; i<canvas.height; i = i + roadblockHeight/2)
         {
+                let xc = i/8;
                 ctx.beginPath();
-                ctx.rect(canvas.width/2,i,100,roadblockHeight);
-                ctx.fillStyle = "#0095DD";
+                ctx.rect(canvas.width/2-xc,i,2*xc,roadblockHeight);
+                ctx.fillStyle = "grey";
                 ctx.fill();
                 ctx.closePath();
         }       
@@ -257,14 +258,18 @@ customElements.define("game-view", class extends HTMLElement {
                 this.render();
                 ut = setInterval(updateText, 1000);
                 mv = setInterval(move, 100);
+                //place car
+                x = canvas.width/2;
+                y = canvas.height - ballRadius;
         }
 
         render() {
                 direction = getDirection(roll, pitch, yaw, mode);
                 force = getForce(roll, pitch, yaw, mode);
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawCar();
+                //Need to draw road before the car                
                 drawRoad();
+                drawCar();
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
