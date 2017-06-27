@@ -188,7 +188,8 @@ function move() //Moves the car
         }
 }
 
-function drawCar() {
+function drawCar() 
+{
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
         ctx.fillStyle = "#0095DD";
@@ -198,6 +199,7 @@ function drawCar() {
 
 function drawRoad()
 {
+        //TODO: Draw a curvy, random road 
         for(let i=0; i<canvas.height; i = i + roadblockHeight/2)
         {
                 let xc = i/8;
@@ -206,9 +208,21 @@ function drawRoad()
                 ctx.fillStyle = "grey";
                 ctx.fill();
                 ctx.closePath();
-        }       
+        }
 }
 
+function offRoad()      //Determines if the car is off the road or not by checking the pixel the car is on
+{
+        //TODO
+        return 0;
+}
+
+function update()       //Update vars, move the car accordingly
+{
+                direction = getDirection(roll, pitch, yaw, mode);
+                force = getForce(roll, pitch, yaw, mode);
+                move();
+}
 //The custom element where the game will be rendered
 customElements.define("game-view", class extends HTMLElement {
         constructor() {
@@ -257,15 +271,13 @@ customElements.define("game-view", class extends HTMLElement {
                 }
                 this.render();
                 ut = setInterval(updateText, 1000);
-                mv = setInterval(move, 100);
+                mv = setInterval(update, 100);
                 //place car
                 x = canvas.width/2;
                 y = canvas.height - ballRadius;
         }
 
         render() {
-                direction = getDirection(roll, pitch, yaw, mode);
-                force = getForce(roll, pitch, yaw, mode);
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 //Need to draw road before the car                
                 drawRoad();
