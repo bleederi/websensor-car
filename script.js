@@ -57,6 +57,7 @@ var force = null;
 
 var ballRadius = 5;
 var roadblockHeight = 100;
+var roadblockWidthInitial = 200;
 
 //Rendering vars (Three.JS)
 var scene = null;
@@ -205,7 +206,7 @@ function drawRoad()
         //TODO: Draw a curvy, random road 
         for(let i=0; i<canvas.height; i = i + roadblockHeight/20)
         {
-                let xc = i/8;
+                let xc = (i/8)*(roadBlockWidthInitial/200);
                 ctx.beginPath();
                 ctx.rect(canvas.width/2-xc,i,2*xc,roadblockHeight);
                 ctx.fillStyle = "grey";
