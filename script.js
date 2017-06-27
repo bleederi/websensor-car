@@ -53,6 +53,7 @@ var direction = null;
 var force = null;
 
 var ballRadius = 5;
+var roadblockHeight = 100;
 
 //Rendering vars (Three.JS)
 var scene = null;
@@ -187,12 +188,24 @@ function move() //Moves the car
         }
 }
 
-function drawBall() {
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
+function drawCar() {
+        ctx.beginPath();
+        ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+}
+
+function drawRoad()
+{
+        for(let i=0; i<canvas.height; i = i + roadblockHeight)
+        {
+                ctx.beginPath();
+                ctx.rect(canvas.width/2,i,100,roadblockHeight);
+                ctx.fillStyle = "#0095DD";
+                ctx.fill();
+                ctx.closePath();
+        }       
 }
 
 //The custom element where the game will be rendered
@@ -250,7 +263,8 @@ customElements.define("game-view", class extends HTMLElement {
                 direction = getDirection(roll, pitch, yaw, mode);
                 force = getForce(roll, pitch, yaw, mode);
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawBall();
+                drawCar();
+                drawRoad();
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
