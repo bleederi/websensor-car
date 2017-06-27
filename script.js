@@ -33,6 +33,8 @@ const GRAVITY = 9.81;
 var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //device orientation
 var sensorfreq = 60;
 
+var orientation_sensor = null;
+
 var roll = null;
 var pitch = null;
 var yaw = null;
@@ -52,8 +54,6 @@ var y = 0;
 var speed = 5;
 var angle = 0;
 var mod = 0;
-
-//var textUpdate = setInterval(update_text, 1000/sensorfreq);
 
 //Sensor classes and low-pass filter
 class AbsOriSensor {
