@@ -239,7 +239,14 @@ function drawRoad()
 function offRoad()      //Determines if the car is off the road or not by checking the pixel the car is on
 {
         //TODO
-        return 0;
+        if(x > canvas.width/2 + roadWidth/2 || x < canvas.width/2-roadWidth/2)
+        {
+            return 1;   //off the road
+        }
+        else
+        {
+            return 0;   //on the road
+        }
 }
 
 function update()       //Update vars, move the car accordingly
