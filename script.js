@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 
-
-Code from http://ucfcdl.github.io/html5-tutorial/ has been used in creating this demo
 */
 'use strict';
 
