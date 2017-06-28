@@ -47,7 +47,7 @@ var orientation_sensor = null;
 var loopvar = null;
 
 var mode = "portrait";
-var nosensors = 1;      //Flag for testing without sensors
+var nosensors = 0;      //Flag for testing without sensors
 
 var roll = null;
 var pitch = null;
@@ -275,10 +275,20 @@ function drawRoad2D()     //Draw the road and the rumble strips
         }
 }
 
-function offRoad()      //Determines if the car is off the road or not by checking the pixel the car is on
+function isOffRoad(x)      //Determines if the car is off the road or not by checking the pixel the car is on
 {
+/*      2D
         //TODO: Inspect pixels instead?
         if(x > canvas.width/2 + roadWidth/2 || x < canvas.width/2-roadWidth/2)
+        {
+            return 1;   //off the road
+        }
+        else
+        {
+            return 0;   //on the road
+        }
+*/
+        if(x > roadWidth/2 || x < -roadWidth/2)
         {
             return 1;   //off the road
         }
@@ -290,9 +300,9 @@ function offRoad()      //Determines if the car is off the road or not by checki
 
 function update()       //Update vars, move the car accordingly
 {
-                direction = getDirection(roll, pitch, yaw, mode);
-                force = getForce(roll, pitch, yaw, mode);
-                move2D();
+        direction = getDirection(roll, pitch, yaw, mode);
+        force = getForce(roll, pitch, yaw, mode);
+        move();
 }
 
 /*      Functions related to testing without sensors      */
@@ -394,7 +404,7 @@ customElements.define("game-view", class extends HTMLElement {
                         window.addEventListener("keyup", keyup_handler, false);
                 }
                 //Update the road
-                //var rb = setInterval(buildRoad2D, 1000/speed);  //2D
+                var rb = setInterval(buildRoad2D, 1000/speed);  //2D
                 this.buildRoad();
                 this.drawRoad();
                 this.render();
@@ -403,6 +413,8 @@ customElements.define("game-view", class extends HTMLElement {
         //Main loop
         loop(camera) {
                 move(camera);
+                var or = isOffRoad(camera.position.x);
+                //console.log(or);
                 //camera.position.x = camera.position.x + 0.1;
                 //console.log("loop");
         }
