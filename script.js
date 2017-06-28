@@ -79,7 +79,7 @@ var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 10;    //Segment length in pixels
 var roadLength = canvas.height/segmentLength;   //road length in segments
-var roadWidth = 400;    //Road width in pixels
+var roadWidth = canvas.width;    //Road width in pixels
 var rumbleLength = 3;   //Length of a "rumble"
 
 //Camera vars
@@ -229,8 +229,7 @@ function buildRoad()    //Generates the road segments, updates them as needed by
         }
         else
         {
-                let a = segments.pop();
-                segments.unshift(a);
+                segments.unshift(segments.pop());       //Shift the segments, updating the road
         }
 }
 function drawRoad()
@@ -241,11 +240,23 @@ function drawRoad()
         {
                 let xc = (j/segments.length)*roadWidth;
                 ctx.beginPath();
-                ctx.rect(canvas.width/2-xc,j*segmentLength,2*xc,roadblockHeight);
+                ctx.rect(canvas.width/2-xc,j*segmentLength,2*xc,roadblockHeight);     //road
                 ctx.fillStyle = segments[j].color;               
+                ctx.fill();
+                ctx.beginPath();
+                ctx.rect(canvas.width/2+xc,j*segmentLength,xc,(xc/100)*roadblockHeight);       //right rumble strip
+                ctx.fillStyle = "red";               
+                ctx.fill();
+                ctx.beginPath();
+                ctx.rect(canvas.width/2-xc,j*segmentLength,-xc,(xc/100)*roadblockHeight);       //right rumble strip
+                ctx.fillStyle = "red";               
                 ctx.fill();
                 ctx.closePath(); 
         }
+}
+
+function drawRumbles()
+{
 }
 
 function offRoad()      //Determines if the car is off the road or not by checking the pixel the car is on
@@ -354,7 +365,7 @@ customElements.define("game-view", class extends HTMLElement {
                         window.addEventListener("keyup", keyup_handler, false);
                 }
                 //Update the road
-                var rb = setInterval(buildRoad, 2000)
+                var rb = setInterval(buildRoad, 1000/speed)
         }
 
         render() {
