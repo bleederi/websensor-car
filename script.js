@@ -44,6 +44,8 @@ var sensorfreq = 60;
 
 var orientation_sensor = null;
 
+var loopvar = null;
+
 var mode = "portrait";
 var nosensors = 1;      //Flag for testing without sensors
 
@@ -191,7 +193,7 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
         return force;
 }
 
-function move() //Moves the car
+function move2D() //Moves the car
 {
         if(direction == "left")
         {
@@ -203,6 +205,21 @@ function move() //Moves the car
         }
 }
 
+function move(camera) //Moves the car(camera)
+{
+        force = 0.05;
+        speed = 0.05;
+        if(direction == "left")
+        {
+                camera.position.x = camera.position.x - force;
+        }
+        else if (direction == "right")
+        {
+                camera.position.x = camera.position.x + force;
+        }
+        camera.position.z = camera.position.z - speed;
+}
+
 function drawCar() 
 {
         ctx.beginPath();
@@ -212,7 +229,7 @@ function drawCar()
         ctx.closePath();
 }
 
-function buildRoad()    //Generates the road segments, updates them as needed by "moving" the road
+function buildRoad2D()    //Generates the road segments, updates them as needed by "moving" the road
 {
         if(segments.length === 0)       //Generate the road segments
         {
@@ -233,7 +250,7 @@ function buildRoad()    //Generates the road segments, updates them as needed by
                 segments.unshift(segments.pop());       //Shift the segments, updating the road
         }
 }
-function drawRoad()     //Draw the road and the rumble strips
+function drawRoad2D()     //Draw the road and the rumble strips
 {
         //TODO: Draw a curvy, random road
         //Draw a rumble - This is for 2D
@@ -275,7 +292,7 @@ function update()       //Update vars, move the car accordingly
 {
                 direction = getDirection(roll, pitch, yaw, mode);
                 force = getForce(roll, pitch, yaw, mode);
-                move();
+                move2D();
 }
 
 /*      Functions related to testing without sensors      */
@@ -300,7 +317,7 @@ function keypress_handler(event) {
 function updateNS()       //Update vars, move the car accordingly (no sensors)
 {
                 force = 5;
-                move();
+                move2D();
 }
 
 
@@ -350,9 +367,11 @@ customElements.define("game-view", class extends HTMLElement {
                         console.log("Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags.");
                         this.innerHTML = "Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags";
                 }
-                //place car
-                x = canvas.width/2;
-                y = canvas.height - ballRadius;
+                //place car - 2D
+                //x = canvas.width/2;   //2D
+                //y = canvas.height - ballRadius;       //2D
+                x = 0;
+                y = 0;
                 //create cube
 		//var geometry = new THREE.BoxGeometry( 3, 1, roadLength );
 		//var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -363,7 +382,6 @@ customElements.define("game-view", class extends HTMLElement {
 
 		//this.camera.position.y = 0;
 		//this.camera.position.z = 0;
-                this.render();
                 if(!nosensors)
                 {
                         ut = setInterval(updateText, 1000);
@@ -376,14 +394,24 @@ customElements.define("game-view", class extends HTMLElement {
                         window.addEventListener("keyup", keyup_handler, false);
                 }
                 //Update the road
-                var rb = setInterval(buildRoad, 1000/speed)
+                //var rb = setInterval(buildRoad2D, 1000/speed);  //2D
+                this.buildRoad();
+                this.drawRoad();
+                this.render();
+                loopvar = setInterval(this.loop.bind(null, this.camera), step);
+        }
+        //Main loop
+        loop(camera) {
+                move(camera);
+                //camera.position.x = camera.position.x + 0.1;
+                console.log("loop");
         }
 
         render() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 //console.log(segments);
-                //Need to draw road before the car                
-                this.drawRoad();
+                //Need to draw road before the car               
+                drawRoad2D();     //for 2D
                 drawCar();
                 
                 //Rotate cube
@@ -394,16 +422,40 @@ customElements.define("game-view", class extends HTMLElement {
                 requestAnimationFrame(() => this.render());
         }
 
+        buildRoad() {
+                for(let i=0; i<roadLength; i++)
+                {
+                        if(i%rumbleLength === 0)
+                        {
+                            segments.push({"color":"black"});
+                        }
+                        else
+                        {
+                            segments.push({"color":"grey"});
+                        }        
+                }
+        }
         drawRoad() {
                 var geometry = new THREE.BoxGeometry( 3, 1, roadLength/segmentLength );
+                console.log(segments.length);
                 for (let j=0; j<segments.length; j++)
                 {
                         var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
         		var cube = new THREE.Mesh( geometry, material );
                         cube.position.z = -3*j;
-                        cube.position.y = -3;
-		        scene.add( cube );     
+                        cube.position.y = -2;
+		        scene.add( cube );
+               console.log("Added segment");
                 }
+                console.log(scene.children.length);
+                /*
+                for(let i=0; i < scene.children.length; i++){       //Remove all segments that are far enough away
+                        var obj = scene.children[i];
+                        if(obj.position.z > 10)
+                        {
+                                scene.remove(obj);
+                        }
+                }*/
         }
 
 });
