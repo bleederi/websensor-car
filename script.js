@@ -77,7 +77,7 @@ var mod = 0;
 var fps           = 60;
 var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
-var segmentLength = 100;    //Segment length in pixels
+var segmentLength = 10;    //Segment length in pixels
 var roadLength = canvas.height/segmentLength;   //road length in segments
 var roadWidth = 400;    //Road width in pixels
 var rumbleLength = 3;   //Length of a "rumble"
@@ -219,11 +219,11 @@ function buildRoad()    //Generates the road segments, updates them as needed by
                 {
                         if(i%rumbleLength === 0)
                         {
-                            segments.push("black");
+                            segments.push({"color":"black"});
                         }
                         else
                         {
-                            segments.push("grey");
+                            segments.push({"color":"grey"});
                         }        
                 }
         }
@@ -236,32 +236,21 @@ function buildRoad()    //Generates the road segments, updates them as needed by
 function drawRoad()
 {
         //TODO: Draw a curvy, random road
-        for(let i=0; i<canvas.height; i = i + roadblockHeight/20)
-        {
         //Draw a rumble
-        for (let j=0; j<rumbleLength; j++)
+        for (let j=0; j<segments.length; j++)
         {
-            //But how?   
-        }
-                let xc = (i/8)*(roadblockWidthInitial/200);
+                let xc = (j/segments.length)*roadWidth;
                 ctx.beginPath();
-                ctx.rect(canvas.width/2-xc,i,2*xc,roadblockHeight);
-                if(i%rumbleLength === 0)
-                {
-                    ctx.fillStyle = "black";
-                }
-                else
-                {
-                    ctx.fillStyle = "grey";
-                }                
+                ctx.rect(canvas.width/2-xc,j*segmentLength,2*xc,roadblockHeight);
+                ctx.fillStyle = segments[j].color;               
                 ctx.fill();
-                ctx.closePath();
+                ctx.closePath(); 
         }
 }
 
 function offRoad()      //Determines if the car is off the road or not by checking the pixel the car is on
 {
-        //TODO
+        //TODO: Inspect pixels instead?
         if(x > canvas.width/2 + roadWidth/2 || x < canvas.width/2-roadWidth/2)
         {
             return 1;   //off the road
@@ -364,13 +353,13 @@ customElements.define("game-view", class extends HTMLElement {
                         window.addEventListener("keydown", keypress_handler, false);
                         window.addEventListener("keyup", keyup_handler, false);
                 }
+                //Update the road
+                var rb = setInterval(buildRoad, 2000)
         }
 
         render() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                //Update the road
-                buildRoad();
-                console.log(segments);
+                //console.log(segments);
                 //Need to draw road before the car                
                 drawRoad();
                 drawCar();
