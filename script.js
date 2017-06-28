@@ -79,7 +79,7 @@ var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 10;    //Segment length in pixels
 var roadLength = canvas.height/segmentLength;   //road length in segments
-var roadWidth = canvas.width;    //Road width in pixels
+var roadWidth = 0.3*canvas.width;    //Road width in pixels
 var rumbleLength = 3;   //Length of a "rumble"
 
 //Camera vars
@@ -232,7 +232,7 @@ function buildRoad()    //Generates the road segments, updates them as needed by
                 segments.unshift(segments.pop());       //Shift the segments, updating the road
         }
 }
-function drawRoad()
+function drawRoad()     //Draw the road and the rumble strips
 {
         //TODO: Draw a curvy, random road
         //Draw a rumble
@@ -243,20 +243,18 @@ function drawRoad()
                 ctx.rect(canvas.width/2-xc,j*segmentLength,2*xc,roadblockHeight);     //road
                 ctx.fillStyle = segments[j].color;               
                 ctx.fill();
+
                 ctx.beginPath();
-                ctx.rect(canvas.width/2+xc,j*segmentLength,xc,(xc/100)*roadblockHeight);       //right rumble strip
-                ctx.fillStyle = "red";               
+                ctx.rect(canvas.width/2+xc,j*segmentLength,xc/2,(xc/100)*roadblockHeight);       //right rumble strip
+                ctx.fillStyle = "red";        
                 ctx.fill();
+                
                 ctx.beginPath();
-                ctx.rect(canvas.width/2-xc,j*segmentLength,-xc,(xc/100)*roadblockHeight);       //right rumble strip
+                ctx.rect(canvas.width/2-xc,j*segmentLength,-xc/2,(xc/100)*roadblockHeight);       //right rumble strip
                 ctx.fillStyle = "red";               
                 ctx.fill();
                 ctx.closePath(); 
         }
-}
-
-function drawRumbles()
-{
 }
 
 function offRoad()      //Determines if the car is off the road or not by checking the pixel the car is on
@@ -281,8 +279,9 @@ function update()       //Update vars, move the car accordingly
 
 /*      Functions related to testing without sensors      */
 function keyup_handler(event) {
-    if (event.keyCode == 87 || event.keyCode == 83) {
-        mod = 0;
+    if (event.keyCode == 65 || event.keyCode == 68) {
+        force = 0;
+        direction = "none";
     }
 }
 
@@ -294,6 +293,7 @@ function keypress_handler(event) {
     if (event.keyCode == 68) {
         direction = "right";
     }
+        force = 5;
 }
 
 function updateNS()       //Update vars, move the car accordingly (no sensors)
