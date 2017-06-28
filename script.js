@@ -183,11 +183,11 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
         {
                 if(pitch < 0)
                 {       
-                        force = -pitch;
+                        force = -pitch/10;
                 }
                 else
                 {
-                        force = pitch;
+                        force = pitch/10;
                 }
         }
         return force;
@@ -207,7 +207,6 @@ function move2D() //Moves the car
 
 function move(camera) //Moves the car(camera)
 {
-        force = 0.05;
         speed = 0.05;
         if(direction == "left")
         {
