@@ -78,6 +78,7 @@ var fps           = 60;
 var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 100;    //Segment length in pixels
+var roadLength = canvas.height/segmentLength;   //road length in segments
 var roadWidth = 400;    //Road width in pixels
 var rumbleLength = 3;   //Length of a "rumble"
 
@@ -210,6 +211,28 @@ function drawCar()
         ctx.closePath();
 }
 
+function buildRoad()    //Generates the road segments, updates them as needed by "moving" the road
+{
+        if(segments.length === 0)       //Generate the road segments
+        {
+                for(let i=0; i<roadLength; i++)
+                {
+                        if(i%rumbleLength === 0)
+                        {
+                            segments.push("black");
+                        }
+                        else
+                        {
+                            segments.push("grey");
+                        }        
+                }
+        }
+        else
+        {
+                let a = segments.pop();
+                segments.unshift(a);
+        }
+}
 function drawRoad()
 {
         //TODO: Draw a curvy, random road
@@ -329,7 +352,6 @@ customElements.define("game-view", class extends HTMLElement {
                 //place car
                 x = canvas.width/2;
                 y = canvas.height - ballRadius;
-                //buildRoad();
                 this.render();
                 if(!nosensors)
                 {
@@ -346,6 +368,9 @@ customElements.define("game-view", class extends HTMLElement {
 
         render() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+                //Update the road
+                buildRoad();
+                console.log(segments);
                 //Need to draw road before the car                
                 drawRoad();
                 drawCar();
