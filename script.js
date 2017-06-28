@@ -47,7 +47,7 @@ var orientation_sensor = null;
 var loopvar = null;
 
 var mode = "portrait";
-var nosensors = 0;      //Flag for testing without sensors
+var nosensors = 1;      //Flag for testing without sensors
 
 var roll = null;
 var pitch = null;
@@ -205,21 +205,24 @@ function move2D() //Moves the car
         }
 }
 
-function move(camera) //Moves the car(camera)
+function move(camera, car) //Moves the car(camera)
 {
         speed = 0.05;
         if(direction == "left")
         {
                 camera.position.x = camera.position.x - force;
+                car.position.x = car.position.x - force;
         }
         else if (direction == "right")
         {
                 camera.position.x = camera.position.x + force;
+                car.position.x = car.position.x + force;
         }
         camera.position.z = camera.position.z - speed;
+        car.position.z = car.position.z - speed;
 }
 
-function drawCar() 
+function drawCar2D() 
 {
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -356,6 +359,8 @@ customElements.define("game-view", class extends HTMLElement {
         //sphereMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, overdraw: 0.5 } );
         //sphereMesh = new THREE.Mesh(sphere, sphereMaterial);
         //scene.add(sphereMesh);
+
+        this.carcube = null;
         }
 
         connectedCallback() {
@@ -406,12 +411,13 @@ customElements.define("game-view", class extends HTMLElement {
                 var rb = setInterval(buildRoad2D, 1000/speed);  //2D
                 this.buildRoad();
                 this.drawRoad();
+                this.drawCar();
                 this.render();
-                loopvar = setInterval(this.loop.bind(null, this.camera), step);
+                loopvar = setInterval(this.loop.bind(null, this.camera, this.carcube), step);
         }
         //Main loop
-        loop(camera) {
-                move(camera);
+        loop(camera, carcube) {
+                move(camera, carcube);
                 var or = isOffRoad(camera.position.x);
                 //console.log(or);
                 //camera.position.x = camera.position.x + 0.1;
@@ -423,7 +429,7 @@ customElements.define("game-view", class extends HTMLElement {
                 //console.log(segments);
                 //Need to draw road before the car               
                 drawRoad2D();     //for 2D
-                drawCar();
+                drawCar2D();
                 
                 //Rotate cube
 	        //cube.rotation.x += 0.1;
@@ -446,9 +452,8 @@ customElements.define("game-view", class extends HTMLElement {
                         }        
                 }
         }
-        drawRoad() {
+        drawRoad() {    //Draws the road on the screen
                 var geometry = new THREE.BoxGeometry( 3, 1, roadLength/segmentLength );
-                console.log(segments.length);
                 for (let j=0; j<segments.length; j++)
                 {
                         var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
@@ -457,6 +462,14 @@ customElements.define("game-view", class extends HTMLElement {
                         cube.position.y = -2;
 		        scene.add( cube );
                 }
+        }
+        drawCar() {     //Draws the car on the screen
+                var geometry = new THREE.BoxGeometry( 3, 1, roadLength/segmentLength );
+                var material = new THREE.MeshBasicMaterial( { color: "red"} );
+		this.carcube = new THREE.Mesh( geometry, material );
+                this.carcube.position.z = -30;
+                this.carcube.position.y = 0;
+	        scene.add( this.carcube );
         }
 
 });
