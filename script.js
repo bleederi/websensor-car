@@ -442,14 +442,29 @@ customElements.define("game-view", class extends HTMLElement {
         buildRoad() {
                 for(let i=0; i<roadLength; i++)
                 {
+                        let segment = {"z":null, "y":null, "color":null, "type":null};
+                        segment.z = -segmentLength*i;
+                        segment.y = -2;
                         if(i%rumbleLength === 0)
                         {
-                            segments.push({"color":"white"});
+                                segment.color = "white";
+                            //segments.push({"color":"white", "type":"straight"});
                         }
                         else
                         {
-                            segments.push({"color":"grey"});
-                        }        
+                                segment.color = "grey";
+                            //segments.push({"color":"grey", "type": "straight"});
+                        }
+                        //TODO: Generate curves somehow
+                        if(1 != 1)      //add condition for curve here
+                        {
+                                segment.type = "curve";
+                        }
+                        else
+                        {
+                                segment.type = "straight";
+                        }                        
+                        segments.push(segment);
                 }
         }
         drawRoad() {    //Draws the road on the screen
@@ -459,7 +474,8 @@ customElements.define("game-view", class extends HTMLElement {
                         var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
         		var cube = new THREE.Mesh( geometry, material );
                         cube.position.z = -(roadLength/segmentLength)*j;
-                        cube.position.y = -2;
+                        //cube.position.z = segments[j].z;      //Lagging for some reason, should fix
+                        cube.position.y = segments[j].y;
 		        scene.add( cube );
                 }
         }
