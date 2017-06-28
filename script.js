@@ -79,7 +79,8 @@ var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 10;    //Segment length in pixels
 var roadLength = canvas.height/segmentLength;   //road length in segments
-var roadWidth = 0.3*canvas.width;    //Road width in pixels
+var roadWidth = 3;    //Road width in pixels
+var roadWidth2D = 0.3*canvas.width;
 var rumbleLength = 3;   //Length of a "rumble"
 
 //Camera vars
@@ -235,10 +236,10 @@ function buildRoad()    //Generates the road segments, updates them as needed by
 function drawRoad()     //Draw the road and the rumble strips
 {
         //TODO: Draw a curvy, random road
-        //Draw a rumble
+        //Draw a rumble - This is for 2D
         for (let j=0; j<segments.length; j++)
         {
-                let xc = (j/segments.length)*roadWidth;
+                let xc = (j/segments.length)*roadWidth2D;
                 ctx.beginPath();
                 ctx.rect(canvas.width/2-xc,j*segmentLength,2*xc,roadblockHeight);     //road
                 ctx.fillStyle = segments[j].color;               
@@ -352,6 +353,16 @@ customElements.define("game-view", class extends HTMLElement {
                 //place car
                 x = canvas.width/2;
                 y = canvas.height - ballRadius;
+                //create cube
+		//var geometry = new THREE.BoxGeometry( 3, 1, roadLength );
+		//var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		//var cube = new THREE.Mesh( geometry, material );
+                //cube.position.y = -3;
+                //cube.position.z = -5;
+		//scene.add( cube );
+
+		//this.camera.position.y = 0;
+		//this.camera.position.z = 0;
                 this.render();
                 if(!nosensors)
                 {
@@ -372,11 +383,27 @@ customElements.define("game-view", class extends HTMLElement {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 //console.log(segments);
                 //Need to draw road before the car                
-                drawRoad();
+                this.drawRoad();
                 drawCar();
+                
+                //Rotate cube
+	        //cube.rotation.x += 0.1;
+	        //cube.rotation.y += 0.1;
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
+        }
+
+        drawRoad() {
+                var geometry = new THREE.BoxGeometry( 3, 1, roadLength/segmentLength );
+                for (let j=0; j<segments.length; j++)
+                {
+                        var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
+        		var cube = new THREE.Mesh( geometry, material );
+                        cube.position.z = -3*j;
+                        cube.position.y = -3;
+		        scene.add( cube );     
+                }
         }
 
 });
