@@ -404,7 +404,7 @@ customElements.define("game-view", class extends HTMLElement {
         loop(camera) {
                 move(camera);
                 //camera.position.x = camera.position.x + 0.1;
-                console.log("loop");
+                //console.log("loop");
         }
 
         render() {
@@ -427,7 +427,7 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         if(i%rumbleLength === 0)
                         {
-                            segments.push({"color":"black"});
+                            segments.push({"color":"white"});
                         }
                         else
                         {
@@ -442,20 +442,10 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
         		var cube = new THREE.Mesh( geometry, material );
-                        cube.position.z = -3*j;
+                        cube.position.z = -(roadLength/segmentLength)*j;
                         cube.position.y = -2;
 		        scene.add( cube );
-               console.log("Added segment");
                 }
-                console.log(scene.children.length);
-                /*
-                for(let i=0; i < scene.children.length; i++){       //Remove all segments that are far enough away
-                        var obj = scene.children[i];
-                        if(obj.position.z > 10)
-                        {
-                                scene.remove(obj);
-                        }
-                }*/
         }
 
 });
