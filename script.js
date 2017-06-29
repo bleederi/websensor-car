@@ -47,7 +47,7 @@ var orientation_sensor = null;
 var loopvar = null;
 
 var mode = "portrait";
-var nosensors = 1;      //Flag for testing without sensors
+var nosensors = 0;      //Flag for testing without sensors
 
 var roll = null;
 var pitch = null;
