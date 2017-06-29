@@ -88,7 +88,11 @@ var rumbleLength = 3;   //Length of a "rumble"
 var curveLength = 5;    //How many segments a curve consists of
 
 //Camera vars
-var cameraHeight = 1000;    
+var cameraHeight = 1000;
+
+//Timer
+var time=0;
+var timer=setInterval(function(){timer++; console.log(timer);},1000); 
 
 //Sensor classes and low-pass filter
 class AbsOriSensor {
@@ -331,6 +335,14 @@ function keypress_handler(event) {
         force = 0.05;
 }
 
+function distanceFromAtoB(position1,x2,y2,z2) {  //get position distance from specified point
+    var distance = new THREE.Vector3();
+    var target = new THREE.Vector3(x2,y2,z2);
+    distance.subVectors(position1, target);
+    return distance.length();
+};
+
+
 function updateNS()       //Update vars, move the car accordingly (no sensors)
 {
                 force = 0.05;
@@ -466,7 +478,7 @@ customElements.define("game-view", class extends HTMLElement {
                         segment.z = -(segmentLength*i);
                         //console.log(segment.z);
                         segment.y = -2;
-                        segment.x = roadx;                       
+                        segment.x = roadx;    
                         segments.push(segment);
                 }
                 //color the segments
@@ -508,6 +520,10 @@ customElements.define("game-view", class extends HTMLElement {
                         //console.log(segment.position.z);
                         segment.position.x = segments[j].x;
                         segment.position.y = segments[j].y;
+                        if(segment.bb === undefined)    //compute bounding boxes only once
+                        {
+                                segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
+                        }
 		        scene.add( segment );
                 }
         }
@@ -517,6 +533,7 @@ customElements.define("game-view", class extends HTMLElement {
 		this.carcube = new THREE.Mesh( geometry, material );
                 this.carcube.position.z = 0;
                 this.carcube.position.y = 0;
+                this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
         }
 
