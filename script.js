@@ -549,8 +549,8 @@ customElements.define("game-view", class extends HTMLElement {
                         var material = new THREE.MeshBasicMaterial( { color: "blue"} );
 		        var obstacle = new THREE.Mesh( geometry, material );
                         obstacle.position.z = segments[i].z;
-                        obstacle.position.y = -1;
-                        obstacle.position.x = 0;      //TODO:make random
+                        obstacle.position.y = -0.5;
+                        obstacle.position.x = segments[i].x - roadWidth/2 + roadWidth * Math.random();      //TODO:make random
                         scene.add( obstacle );
                 }
         }
