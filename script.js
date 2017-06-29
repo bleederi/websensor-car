@@ -86,6 +86,7 @@ var roadWidth = 5;    //Road width in pixels
 var roadWidth2D = 0.3*canvas.width;
 var rumbleLength = 3;   //Length of a "rumble"
 var curveLength = 5;    //How many segments a curve consists of
+var obstacles = [];     //Array of the obstacles
 
 //Camera vars
 var cameraHeight = 1000;
@@ -229,6 +230,27 @@ function move(camera, car) //Moves the car(camera)
                 camera.position.z = camera.position.z - speed;
                 car.position.z = car.position.z - speed;
         }
+}
+
+function checkCollision(car) {      //Check if the car is colliding with any other object
+//TODO: Too slow, need to optimize
+        for (let i=0; i<segments.length; i++)   //road segments - is the car on the road?
+        {
+                
+        }
+        for (let i=0; i<obstacles.length; i++)   //obstacles - did the car crash into any of the obstacles?
+        {
+                let collision = car.bb.intersectsBox(obstacles[i].bb);
+                if(collision === true)
+                {
+                        console.log("Collision");
+                }
+                else
+                {
+                        //console.log("No collision");
+                }
+        }
+        //console.log("C check");
 }
 
 function drawCar2D() 
@@ -431,6 +453,7 @@ customElements.define("game-view", class extends HTMLElement {
         loop(camera, carcube) {
                 //console.log("cc", carcube);
                 move(camera, carcube);
+                checkCollision(carcube);
                 var or = isOffRoad(camera.position.x);
                 //console.log(or);
                 //camera.position.x = camera.position.x + 0.1;
@@ -565,7 +588,9 @@ customElements.define("game-view", class extends HTMLElement {
 		        var obstacle = new THREE.Mesh( geometry, material );
                         obstacle.position.z = segments[i].z;
                         obstacle.position.y = -0.5;
-                        obstacle.position.x = segments[i].x - roadWidth/2 + roadWidth * Math.random();      //TODO:make random
+                        obstacle.position.x = segments[i].x - roadWidth/2 + roadWidth * Math.random();
+                        obstacle.bb = new THREE.Box3().setFromObject(obstacle); //create bounding box for collision
+                        obstacles.push(obstacle);
                         scene.add( obstacle );
                 }
         }
