@@ -80,7 +80,7 @@ var fps           = 60;
 var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 10;    //Segment length in pixels
-var roadLength = canvas.height/segmentLength;   //road length in segments
+var roadLength = 300;   //road length in segments
 var roadWidth = 3;    //Road width in pixels
 var roadWidth2D = 0.3*canvas.width;
 var rumbleLength = 3;   //Length of a "rumble"
@@ -449,7 +449,7 @@ customElements.define("game-view", class extends HTMLElement {
                 for(let i=0; i<=roadLength; i++)
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
-                        segment.z = -Math.floor((segmentLength*i));
+                        segment.z = -(segmentLength*i);
                         //console.log(segment.z);
                         segment.y = -2;
                         if(i%rumbleLength === 0)
@@ -475,7 +475,7 @@ customElements.define("game-view", class extends HTMLElement {
                 }
         }
         drawRoad() {    //Draws the road on the screen
-                var geometry = new THREE.BoxGeometry( 7, 1, 4+Math.floor(roadLength/segmentLength) );
+                var geometry = new THREE.BoxGeometry( 7, 0, segmentLength );
                 for (let j=0; j<segments.length; j++)
                 {
                         var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
@@ -489,11 +489,11 @@ customElements.define("game-view", class extends HTMLElement {
                 }
         }
         createCar() {
-                var geometry = new THREE.BoxGeometry( 1, 1, roadLength/segmentLength );
+                var geometry = new THREE.BoxGeometry( 1, 1, 1 );
                 var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		this.carcube = new THREE.Mesh( geometry, material );
                 this.carcube.position.z = -10;
-                this.carcube.position.y = -1;
+                this.carcube.position.y = 0;
 	        scene.add( this.carcube );
         }
 
