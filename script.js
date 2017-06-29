@@ -82,7 +82,7 @@ var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 10;    //Segment length in pixels
 var roadLength = 300;   //road length in segments
 var roadLength2D = canvas.height/segmentLength;   //road length in segments
-var roadWidth = 3;    //Road width in pixels
+var roadWidth = 5;    //Road width in pixels
 var roadWidth2D = 0.3*canvas.width;
 var rumbleLength = 3;   //Length of a "rumble"
 var curveLength = 5;    //How many segments a curve consists of
@@ -92,7 +92,7 @@ var cameraHeight = 1000;
 
 //Timer
 var time=0;
-var timer=setInterval(function(){timer++; console.log(timer);},1000); 
+var timer=setInterval(function(){timer++;},1000); 
 
 //Sensor classes and low-pass filter
 class AbsOriSensor {
@@ -427,8 +427,10 @@ customElements.define("game-view", class extends HTMLElement {
                 //Update the road
                 var rb = setInterval(buildRoad2D, 1000/speed);  //2D
                 this.buildRoad();
+                //console.log(segments);
                 this.drawRoad();
                 this.createCar();
+                this.createObstacles();
                 this.render();
                 loopvar = setInterval(this.loop.bind(null, this.camera, this.carcube), step);
         }
@@ -465,7 +467,7 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
                         //TODO: Generate curves somehow
-                        if(i%10 === 0)      //add condition for curve here
+                        /*if(i%10 === 0)      //add condition for curve here
                         {
                                 this.createCurve(i, roadx);
                                 roadx = roadx + roadWidth;
@@ -474,7 +476,7 @@ customElements.define("game-view", class extends HTMLElement {
                         else
                         {
                                 segment.type = "straight";
-                        }
+                        }*/
                         segment.z = -(segmentLength*i);
                         //console.log(segment.z);
                         segment.y = -2;
@@ -493,6 +495,9 @@ customElements.define("game-view", class extends HTMLElement {
                                 segments[i].color = "grey";
                         }
                 }
+                //segments.sort((a,b) => parseInt(Math.abs(a.z))-parseInt(Math.abs(b.z)));  //sort the segments according to z coordinate
+                //console.log("sort");
+                //console.log(segments);
         }
 
         createCurve(segmentStart, roadx) {         //Creates a curve and adds it to the road
@@ -512,8 +517,8 @@ customElements.define("game-view", class extends HTMLElement {
                 var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
                 for (let j=0; j<segments.length; j++)
                 {
-                        var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
-        		var segment = new THREE.Mesh( geometry, material );
+                        let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
+        		let segment = new THREE.Mesh( geometry, material );
                         //cube.position.z = -(roadLength/segmentLength)*j;
                         //console.log(cube.position.z);                        
                         segment.position.z = segments[j].z;      //Lagging for some reason, should fix
@@ -535,6 +540,19 @@ customElements.define("game-view", class extends HTMLElement {
                 this.carcube.position.y = 0;
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
+        }
+
+        createObstacles() {     //Create obstacles that the player has to avoid crashing into
+                for (let i=0; i<segments.length; i++)   //Randomly add obstacles, at most one per segment
+                {
+                        var geometry = new THREE.BoxGeometry( 0.5, 1, 0.5 );
+                        var material = new THREE.MeshBasicMaterial( { color: "blue"} );
+		        var obstacle = new THREE.Mesh( geometry, material );
+                        obstacle.position.z = segments[i].z;
+                        obstacle.position.y = -1;
+                        obstacle.position.x = 0;      //TODO:make random
+                        scene.add( obstacle );
+                }
         }
 
 });
