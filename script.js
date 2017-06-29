@@ -351,8 +351,8 @@ customElements.define("game-view", class extends HTMLElement {
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
         this.camera.target = new THREE.Vector3(0, 0, 0);
 
-        sphere = new THREE.SphereGeometry(100, 100, 40);
-        sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
+        //sphere = new THREE.SphereGeometry(100, 100, 40);
+        //sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 
         //videoTexture = new THREE.Texture(video);
         //videoTexture.minFilter = THREE.LinearFilter;
@@ -475,17 +475,17 @@ customElements.define("game-view", class extends HTMLElement {
                 }
         }
         drawRoad() {    //Draws the road on the screen
-                var geometry = new THREE.BoxGeometry( 7, 0, segmentLength );
+                var geometry = new THREE.BoxGeometry( 10, 2, segmentLength );
                 for (let j=0; j<segments.length; j++)
                 {
                         var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
-        		var cube = new THREE.Mesh( geometry, material );
+        		var segment = new THREE.Mesh( geometry, material );
                         //cube.position.z = -(roadLength/segmentLength)*j;
                         //console.log(cube.position.z);                        
-                        cube.position.z = segments[j].z;      //Lagging for some reason, should fix
-                        console.log(cube.position.z);
-                        cube.position.y = segments[j].y;
-		        scene.add( cube );
+                        segment.position.z = segments[j].z;      //Lagging for some reason, should fix
+                        //console.log(segment.position.z);
+                        segment.position.y = segments[j].y;
+		        scene.add( segment );
                 }
         }
         createCar() {
