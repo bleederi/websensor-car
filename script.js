@@ -210,12 +210,12 @@ function move(camera, car) //Moves the car(camera)
         speed = 0.05;
         if(direction == "left")
         {
-                camera.position.x = camera.position.x - force;
+                //camera.position.x = camera.position.x - force;
                 car.position.x = car.position.x - force;
         }
         else if (direction == "right")
         {
-                camera.position.x = camera.position.x + force;
+                //camera.position.x = camera.position.x + force;
                 car.position.x = car.position.x + force;
         }
         camera.position.z = camera.position.z - speed;
@@ -323,12 +323,12 @@ function keypress_handler(event) {
     if (event.keyCode == 68) {
         direction = "right";
     }
-        force = 5;
+        force = 0.05;
 }
 
 function updateNS()       //Update vars, move the car accordingly (no sensors)
 {
-                force = 5;
+                force = 0.05;
                 move2D();
 }
 
@@ -434,16 +434,19 @@ customElements.define("game-view", class extends HTMLElement {
                 //Rotate cube
 	        //cube.rotation.x += 0.1;
 	        //cube.rotation.y += 0.1;
+
+                this.camera.lookAt(this.carcube.position);
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
         }
 
         buildRoad() {
-                for(let i=0; i<roadLength; i++)
+                for(let i=0; i<=roadLength; i++)
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
-                        segment.z = -segmentLength*i;
+                        segment.z = -(segmentLength*i);
+                        //console.log(segment.z);
                         segment.y = -2;
                         if(i%rumbleLength === 0)
                         {
@@ -468,23 +471,25 @@ customElements.define("game-view", class extends HTMLElement {
                 }
         }
         drawRoad() {    //Draws the road on the screen
-                var geometry = new THREE.BoxGeometry( 3, 1, roadLength/segmentLength );
+                var geometry = new THREE.BoxGeometry( 7, 1, Math.floor(roadLength/segmentLength) );
                 for (let j=0; j<segments.length; j++)
                 {
                         var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
         		var cube = new THREE.Mesh( geometry, material );
-                        cube.position.z = -(roadLength/segmentLength)*j;
-                        //cube.position.z = segments[j].z;      //Lagging for some reason, should fix
+                        //cube.position.z = -(roadLength/segmentLength)*j;
+                        //console.log(cube.position.z);                        
+                        cube.position.z = segments[j].z;      //Lagging for some reason, should fix
+                        //console.log(cube.position.z);
                         cube.position.y = segments[j].y;
 		        scene.add( cube );
                 }
         }
         drawCar() {     //Draws the car on the screen
-                var geometry = new THREE.BoxGeometry( 3, 1, roadLength/segmentLength );
+                var geometry = new THREE.BoxGeometry( 1, 1, roadLength/segmentLength );
                 var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		this.carcube = new THREE.Mesh( geometry, material );
-                this.carcube.position.z = -30;
-                this.carcube.position.y = 0;
+                this.carcube.position.z = -10;
+                this.carcube.position.y = -1;
 	        scene.add( this.carcube );
         }
 
