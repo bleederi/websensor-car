@@ -207,20 +207,22 @@ function move2D() //Moves the car
 
 function move(camera, car) //Moves the car(camera)
 {
-        console.log("cc2", car);
-        speed = 0.05;
-        if(direction == "left")
-        {
-                //camera.position.x = camera.position.x - force;
-                car.position.x = car.position.x - force;
+        if(car !== undefined) {
+                console.log("cc2", car);
+                speed = 0.05;
+                if(direction == "left")
+                {
+                        //camera.position.x = camera.position.x - force;
+                        car.position.x = car.position.x - force;
+                }
+                else if (direction == "right")
+                {
+                        //camera.position.x = camera.position.x + force;
+                        car.position.x = car.position.x + force;
+                }
+                camera.position.z = camera.position.z - speed;
+                car.position.z = car.position.z - speed;
         }
-        else if (direction == "right")
-        {
-                //camera.position.x = camera.position.x + force;
-                car.position.x = car.position.x + force;
-        }
-        camera.position.z = camera.position.z - speed;
-        car.position.z = car.position.z - speed;
 }
 
 function drawCar2D() 
@@ -412,7 +414,7 @@ customElements.define("game-view", class extends HTMLElement {
                 var rb = setInterval(buildRoad2D, 1000/speed);  //2D
                 this.buildRoad();
                 this.drawRoad();
-                this.drawCar();
+                this.createCar();
                 this.render();
                 loopvar = setInterval(this.loop.bind(null, this.camera, this.carcube), step);
         }
@@ -486,7 +488,7 @@ customElements.define("game-view", class extends HTMLElement {
 		        scene.add( cube );
                 }
         }
-        drawCar() {     //Draws the car on the screen
+        createCar() {
                 var geometry = new THREE.BoxGeometry( 1, 1, roadLength/segmentLength );
                 var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		this.carcube = new THREE.Mesh( geometry, material );
