@@ -47,7 +47,7 @@ var orientation_sensor = null;
 var loopvar = null;
 
 var mode = "portrait";
-var nosensors = 0;      //Flag for testing without sensors
+var nosensors = 1;      //Flag for testing without sensors
 
 var roll = null;
 var pitch = null;
@@ -452,22 +452,12 @@ customElements.define("game-view", class extends HTMLElement {
                 for(let i=0; i<roadLength; i++)
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
-                        if(i%rumbleLength === 0)
-                        {
-                                segment.color = "white";
-                            //segments.push({"color":"white", "type":"straight"});
-                        }
-                        else
-                        {
-                                segment.color = "grey";
-                            //segments.push({"color":"grey", "type": "straight"});
-                        }
                         //TODO: Generate curves somehow
                         if(i%10 === 0)      //add condition for curve here
                         {
                                 this.createCurve(i, roadx);
                                 roadx = roadx + roadWidth;
-                                i = i + curveLength -1;
+                                i = i + curveLength;
                         }
                         else
                         {
@@ -479,6 +469,18 @@ customElements.define("game-view", class extends HTMLElement {
                         segment.x = roadx;                       
                         segments.push(segment);
                 }
+                //color the segments
+                for(let i=0; i<segments.length; i++)
+                {
+                        if(i%rumbleLength === 0)
+                        {
+                                segments[i].color = "white";
+                        }
+                        else
+                        {
+                                segments[i].color = "grey";
+                        }
+                }
         }
 
         createCurve(segmentStart, roadx) {         //Creates a curve and adds it to the road
@@ -486,7 +488,7 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
                         segment.type = "curve";
-                        segment.color = "green";
+                        //segment.color = "green";
                         segment.z = -(segmentLength*(segmentStart+j));
                         segment.y = -2;
                         segment.x = roadx;
