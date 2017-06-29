@@ -214,12 +214,12 @@ function move(camera, car) //Moves the car(camera)
                 speed = 0.05;
                 if(direction == "left")
                 {
-                        //camera.position.x = camera.position.x - force;
+                        camera.position.x = camera.position.x - force;
                         car.position.x = car.position.x - force;
                 }
                 else if (direction == "right")
                 {
-                        //camera.position.x = camera.position.x + force;
+                        camera.position.x = camera.position.x + force;
                         car.position.x = car.position.x + force;
                 }
                 camera.position.z = camera.position.z - speed;
@@ -457,7 +457,7 @@ customElements.define("game-view", class extends HTMLElement {
                         {
                                 this.createCurve(i, roadx);
                                 roadx = roadx + roadWidth;
-                                i = i + curveLength-1;
+                                i = i + curveLength-1;  //push the index forward
                         }
                         else
                         {
