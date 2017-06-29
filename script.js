@@ -467,7 +467,7 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
                         //TODO: Generate curves somehow
-                        /*if(i%10 === 0)      //add condition for curve here
+                        if(i%10 === 0)      //add condition for curve here
                         {
                                 this.createCurve(i, roadx);
                                 roadx = roadx + roadWidth;
@@ -476,7 +476,7 @@ customElements.define("game-view", class extends HTMLElement {
                         else
                         {
                                 segment.type = "straight";
-                        }*/
+                        }
                         segment.z = -(segmentLength*i);
                         //console.log(segment.z);
                         segment.y = -2;
