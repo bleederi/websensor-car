@@ -445,7 +445,7 @@ customElements.define("game-view", class extends HTMLElement {
                 for(let i=0; i<=roadLength; i++)
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
-                        segment.z = -(segmentLength*i);
+                        segment.z = -Math.floor((segmentLength*i));
                         //console.log(segment.z);
                         segment.y = -2;
                         if(i%rumbleLength === 0)
