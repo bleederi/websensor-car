@@ -479,7 +479,7 @@ customElements.define("game-view", class extends HTMLElement {
                         //cube.position.z = -(roadLength/segmentLength)*j;
                         //console.log(cube.position.z);                        
                         cube.position.z = segments[j].z;      //Lagging for some reason, should fix
-                        //console.log(cube.position.z);
+                        console.log(cube.position.z);
                         cube.position.y = segments[j].y;
 		        scene.add( cube );
                 }
