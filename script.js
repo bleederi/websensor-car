@@ -208,7 +208,7 @@ function move2D() //Moves the car
 function move(camera, car) //Moves the car(camera)
 {
         if(car !== undefined) {
-                console.log("cc2", car);
+                //console.log("cc2", car);
                 speed = 0.05;
                 if(direction == "left")
                 {
@@ -475,7 +475,7 @@ customElements.define("game-view", class extends HTMLElement {
                 }
         }
         drawRoad() {    //Draws the road on the screen
-                var geometry = new THREE.BoxGeometry( 7, 1, 2+Math.floor(roadLength/segmentLength) );
+                var geometry = new THREE.BoxGeometry( 7, 1, 3+Math.floor(roadLength/segmentLength) );
                 for (let j=0; j<segments.length; j++)
                 {
                         var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
