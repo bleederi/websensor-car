@@ -362,8 +362,11 @@ customElements.define("game-view", class extends HTMLElement {
 
         scene = new THREE.Scene();
 
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 200);
         this.camera.target = new THREE.Vector3(0, 0, 0);
+
+	this.camera.position.y = 1;
+	this.camera.position.z = 2;
 
         //sphere = new THREE.SphereGeometry(100, 100, 40);
         //sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
@@ -403,16 +406,6 @@ customElements.define("game-view", class extends HTMLElement {
                 //y = canvas.height - ballRadius;       //2D
                 x = 0;
                 y = 0;
-                //create cube
-		//var geometry = new THREE.BoxGeometry( 3, 1, roadLength );
-		//var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-		//var cube = new THREE.Mesh( geometry, material );
-                //cube.position.y = -3;
-                //cube.position.z = -5;
-		//scene.add( cube );
-
-		this.camera.position.y = 1;
-		this.camera.position.z = 2;
                 if(!nosensors)
                 {
                         ut = setInterval(updateText, 1000);
@@ -425,7 +418,7 @@ customElements.define("game-view", class extends HTMLElement {
                         window.addEventListener("keyup", keyup_handler, false);
                 }
                 //Update the road
-                var rb = setInterval(buildRoad2D, 1000/speed);  //2D
+                //var rb = setInterval(buildRoad2D, 1000/speed);  //2D
                 this.buildRoad();
                 //console.log(segments);
                 this.drawRoad();
@@ -467,10 +460,18 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
                         //TODO: Generate curves somehow
-                        if(i%10 === 0)      //add condition for curve here
+                        if(Math.random() > 0.1)      //add condition for curve here
                         {
-                                this.createCurve(i, roadx);
-                                roadx = roadx + roadWidth;
+                                if(Math.random() > 0.5) //right curve
+                                {
+                                        this.createCurve(i, roadx, "right");
+                                        roadx = roadx + roadWidth;
+                                }
+                                else    //left curve
+                                {
+                                        this.createCurve(i, roadx, "left");
+                                        roadx = roadx - roadWidth;                                
+                                }
                                 i = i + curveLength-1;  //push the index forward
                         }
                         else
@@ -500,17 +501,31 @@ customElements.define("game-view", class extends HTMLElement {
                 //console.log(segments);
         }
 
-        createCurve(segmentStart, roadx) {         //Creates a curve and adds it to the road
+        createCurve(segmentStart, roadx, direction) {         //Creates a curve and adds it to the road
                 for(let j=0; j<curveLength; j++)
                 {
-                        let segment = {"z":null, "y":null, "color":null, "type":null};
-                        segment.type = "curve";
-                        //segment.color = "green";
-                        segment.z = -(segmentLength*(segmentStart+j));
-                        segment.y = -2;
-                        segment.x = roadx;
-                        //roadx = roadx = 1;
-                        segments.push(segment);
+                        if(direction === "right") //right curve
+                        {
+                                let segment = {"z":null, "y":null, "color":null, "type":null};
+                                segment.type = "curve";
+                                //segment.color = "green";
+                                segment.z = -(segmentLength*(segmentStart+j));
+                                segment.y = -2;
+                                segment.x = roadx;
+                                //roadx = roadx = 1;
+                                segments.push(segment);
+                        }
+                        else
+                        {
+                                let segment = {"z":null, "y":null, "color":null, "type":null};
+                                segment.type = "curve";
+                                //segment.color = "green";
+                                segment.z = -(segmentLength*(segmentStart+j));
+                                segment.y = -2;
+                                segment.x = roadx;
+                                //roadx = roadx = 1;
+                                segments.push(segment);
+                        }
                 }
         }
         drawRoad() {    //Draws the road on the screen
@@ -556,81 +571,6 @@ customElements.define("game-view", class extends HTMLElement {
         }
 
 });
-
-/*
-canvas = document.getElementById("canvas");
-context = canvas.getContext("2d");
-car = new Image();
-car.src = "https://i.imgur.com/uwApbV7.png";
-
-window.addEventListener("keydown", keypress_handler, false);
-window.addEventListener("keyup", keyup_handler, false);
-
-var moveInterval = setInterval(function () {
-    draw();
-}, 30);
-
-function draw() {
-    context = canvas.getContext("2d");
-    context.clearRect(0, 0, 800, 800);
-
-    context.fillStyle = "rgb(200, 100, 220)";
-    context.fillRect(50, 50, 100, 100);
-
-    x += (speed * mod) * Math.cos(Math.PI / 180 * angle);
-    y += (speed * mod) * Math.sin(Math.PI / 180 * angle);
-
-    context.save();
-    context.translate(x, y);
-    context.rotate(Math.PI / 180 * angle);
-    context.drawImage(car, -(car.width / 2), -(car.height / 2));
-    context.restore();
-}
-
-function keyup_handler(event) {
-    if (event.keyCode == 87 || event.keyCode == 83) {
-        mod = 0;
-    }
-}
-
-function keypress_handler(event) {
-    console.log(event.keyCode);
-    if (event.keyCode == 87) {
-        mod = 1;
-    }
-    if (event.keyCode == 83) {
-        mod = -1;
-    }
-    if (event.keyCode == 65) {
-        angle -= 5;
-    }
-    if (event.keyCode == 68) {
-        angle += 5;
-    }
-}
-
-function convert_orientation(orimatrix) {        //Convert orientation matrix to Euler angles
-        let alpha = 0;
-        let beta = 0;
-        let gamma = 0;
-        let r11 = orimatrix[0]
-        let r21 = orimatrix[4]
-        let r31 = orimatrix[8]
-        let r32 = orimatrix[9]
-        let r33 = orimatrix[10]
-        let betadivisor = Math.sqrt(Math.pow(r32,2) + Math.pow(r33,2));
-        if(r11 != 0 && r33 != 0 && betadivisor != 0) { //Can't divide by zero
-                alpha = Math.atan2(r21, r11);
-                beta = Math.atan2(-r31, (Math.sqrt(Math.pow(r32,2) + Math.pow(r33,2))));
-                gamma = Math.atan2(r32, r33);
-        }        
-        angles.alpha = alpha;
-        angles.beta = beta;
-        angles.gamma = gamma;
-        return angles;  //from -pi to pi
-}
-
-*/
 
 function magnitude(vector)      //Calculate the magnitude of a vector
 {
