@@ -81,9 +81,11 @@ var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 10;    //Segment length in pixels
 var roadLength = 300;   //road length in segments
+var roadLength2D = canvas.height/segmentLength;   //road length in segments
 var roadWidth = 3;    //Road width in pixels
 var roadWidth2D = 0.3*canvas.width;
 var rumbleLength = 3;   //Length of a "rumble"
+var curveLength = 5;    //How many segments a curve consists of
 
 //Camera vars
 var cameraHeight = 1000;    
@@ -238,7 +240,7 @@ function buildRoad2D()    //Generates the road segments, updates them as needed 
 {
         if(segments.length === 0)       //Generate the road segments
         {
-                for(let i=0; i<roadLength; i++)
+                for(let i=0; i<roadLength2D; i++)
                 {
                         if(i%rumbleLength === 0)
                         {
@@ -397,8 +399,8 @@ customElements.define("game-view", class extends HTMLElement {
                 //cube.position.z = -5;
 		//scene.add( cube );
 
-		//this.camera.position.y = 0;
-		//this.camera.position.z = 0;
+		this.camera.position.y = 1;
+		this.camera.position.z = 2;
                 if(!nosensors)
                 {
                         ut = setInterval(updateText, 1000);
@@ -446,12 +448,10 @@ customElements.define("game-view", class extends HTMLElement {
         }
 
         buildRoad() {
-                for(let i=0; i<=roadLength; i++)
+                let roadx = 0;  //keep track of x coordinate for curves
+                for(let i=0; i<roadLength; i++)
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
-                        segment.z = -(segmentLength*i);
-                        //console.log(segment.z);
-                        segment.y = -2;
                         if(i%rumbleLength === 0)
                         {
                                 segment.color = "white";
@@ -463,19 +463,39 @@ customElements.define("game-view", class extends HTMLElement {
                             //segments.push({"color":"grey", "type": "straight"});
                         }
                         //TODO: Generate curves somehow
-                        if(1 != 1)      //add condition for curve here
+                        if(i%10 === 0)      //add condition for curve here
                         {
-                                segment.type = "curve";
+                                this.createCurve(i, roadx);
+                                roadx = roadx + roadWidth;
+                                i = i + curveLength -1;
                         }
                         else
                         {
                                 segment.type = "straight";
-                        }                        
+                        }
+                        segment.z = -(segmentLength*i);
+                        //console.log(segment.z);
+                        segment.y = -2;
+                        segment.x = roadx;                       
+                        segments.push(segment);
+                }
+        }
+
+        createCurve(segmentStart, roadx) {         //Creates a curve and adds it to the road
+                for(let j=0; j<curveLength; j++)
+                {
+                        let segment = {"z":null, "y":null, "color":null, "type":null};
+                        segment.type = "curve";
+                        segment.color = "green";
+                        segment.z = -(segmentLength*(segmentStart+j));
+                        segment.y = -2;
+                        segment.x = roadx;
+                        //roadx = roadx = 1;
                         segments.push(segment);
                 }
         }
         drawRoad() {    //Draws the road on the screen
-                var geometry = new THREE.BoxGeometry( 10, 2, segmentLength );
+                var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
                 for (let j=0; j<segments.length; j++)
                 {
                         var material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
@@ -484,6 +504,7 @@ customElements.define("game-view", class extends HTMLElement {
                         //console.log(cube.position.z);                        
                         segment.position.z = segments[j].z;      //Lagging for some reason, should fix
                         //console.log(segment.position.z);
+                        segment.position.x = segments[j].x;
                         segment.position.y = segments[j].y;
 		        scene.add( segment );
                 }
@@ -492,7 +513,7 @@ customElements.define("game-view", class extends HTMLElement {
                 var geometry = new THREE.BoxGeometry( 1, 1, 1 );
                 var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		this.carcube = new THREE.Mesh( geometry, material );
-                this.carcube.position.z = -10;
+                this.carcube.position.z = 0;
                 this.carcube.position.y = 0;
 	        scene.add( this.carcube );
         }
