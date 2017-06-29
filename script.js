@@ -47,7 +47,7 @@ var orientation_sensor = null;
 var loopvar = null;
 
 var mode = "portrait";
-var nosensors = 0;      //Flag for testing without sensors
+var nosensors = 1;      //Flag for testing without sensors
 
 var roll = null;
 var pitch = null;
@@ -207,6 +207,7 @@ function move2D() //Moves the car
 
 function move(camera, car) //Moves the car(camera)
 {
+        console.log("cc2", car);
         speed = 0.05;
         if(direction == "left")
         {
@@ -417,6 +418,7 @@ customElements.define("game-view", class extends HTMLElement {
         }
         //Main loop
         loop(camera, carcube) {
+                console.log("cc", carcube);
                 move(camera, carcube);
                 var or = isOffRoad(camera.position.x);
                 //console.log(or);
