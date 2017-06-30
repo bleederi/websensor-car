@@ -55,6 +55,7 @@ var yaw = null;
 
 var direction = null;
 var force = null;
+var collision = false;
 
 var ballRadius = 5;
 var roadblockHeight = 100;
@@ -93,7 +94,7 @@ var cameraHeight = 1000;
 
 //Timer
 var time=0;
-var timer=setInterval(function(){timer++;},1000); 
+var timer=setInterval(function(){timer++;},1);  //timer in ms 
 
 //Sensor classes and low-pass filter
 class AbsOriSensor {
@@ -237,18 +238,6 @@ function checkCollision(car) {      //Check if the car is colliding with any oth
         for (let i=0; i<segments.length; i++)   //road segments - is the car on the road?
         {
                 
-        }
-        for (let i=0; i<obstacles.length; i++)   //did the car crash into any of the obstacles?
-        {
-                var collision = car.bb.intersectsBox(obstacles[i].bb);
-                if(collision === true)
-                {
-                        //console.log("Collision");
-                }
-                else
-                {
-                        //console.log("No collision");
-                }
         }
         //Object collision
         //Collision using raycasting - From https://stemkoski.github.io/Three.js/Collision-Detection.html
@@ -467,7 +456,11 @@ customElements.define("game-view", class extends HTMLElement {
         loop(camera, carcube) {
                 //console.log("cc", carcube);
                 move(camera, carcube);
-                let collision = checkCollision(carcube);
+                //check for collisions once a second
+                if(timer % 100 === 0)   //check for collision every 100 ms
+                {
+                        collision = checkCollision(carcube);
+                }                
                 if(collision)
                 {
                         console.log("Collision");
