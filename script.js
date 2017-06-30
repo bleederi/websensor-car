@@ -104,7 +104,7 @@ var cameraHeight = 1000;
 
 //Timer
 var time=0;
-var timer=setInterval(function(){timer++;},1);  //timer in ms
+var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
 
 var gameview = null;
 
@@ -486,11 +486,8 @@ customElements.define("game-view", class extends HTMLElement {
         loop(camera, carcube) {
                 //console.log("cc", carcube);
                 move(camera, carcube);
-                //check for collisions once a second
-                if(timer % 100 === 0)   //check for collision every 100 ms
-                {
-                        collision = checkCollision(carcube);
-                }                
+                //check for collisions (maybe not every loop?)
+                collision = checkCollision(carcube);            
                 if(collision)
                 {
                         console.log("Collision");
@@ -514,7 +511,7 @@ customElements.define("game-view", class extends HTMLElement {
 
         //Render HUD
         this.hud.innerHTML = timer;
-        //For some reason need to always update the position to avoid the HUD disappearing
+        //For some reason need to always update the position to avoid the HUD disappearinga
         this.hud.style.left = gameview.offsetLeft + 20 + "px";
         this.hud.style.top = gameview.offsetTop + 60 + "px";
 
