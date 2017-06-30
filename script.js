@@ -66,6 +66,7 @@ var yaw = null;
 var direction = null;
 var force = null;
 var collision = false;
+var offroad = false;
 
 var ballRadius = 5;
 var roadblockHeight = 100;
@@ -98,6 +99,8 @@ var roadWidth = 5;    //Road width in pixels
 var rumbleLength = 3;   //Length of a "rumble"
 var curveLength = 5;    //How many segments a curve consists of
 var obstacles = [];     //Array of the obstacles
+var segmentMeshes = [];   //Array of the segment meshes
+var carWidth = 1;
 
 //Camera vars
 var cameraHeight = 1000;
@@ -270,9 +273,14 @@ function checkCollision(car) {      //Check if the car is colliding with any oth
 		
 		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
 		var collisionResults = ray.intersectObjects( obstacles );
-		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
+		if ( ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )) 
                         return 1;
 	}
+        /*
+        if(findClosestSegment(car).lowest > carWidth)
+        {
+                return 1;
+        }*/
         //console.log("C check");
 }
 
@@ -331,7 +339,7 @@ function drawRoad2D()     //Draw the road and the rumble strips
         }
 }
 
-function isOffRoad(x)      //Determines if the car is off the road or not by checking the pixel the car is on
+function isOffRoad(car)      //Determines if the car is off the road or not by checking the pixel the car is on
 {
 /*      2D
         //TODO: Inspect pixels instead?
@@ -344,14 +352,29 @@ function isOffRoad(x)      //Determines if the car is off the road or not by che
             return 0;   //on the road
         }
 */
-        if(x > roadWidth/2 || x < -roadWidth/2)
-        {
-            return 1;   //off the road
-        }
-        else
-        {
-            return 0;   //on the road
-        }
+//If the car's x,z coordinates are within the plane defined by the closest segment, then on road. Else offroad.
+//TODO: FIX
+        let index = findClosestSegment(car).index;
+        let segmentMesh = segmentMeshes[index];
+        let lowest = null;
+        //console.log(segmentMesh);
+                for (let i = 0; i < segmentMesh.geometry.vertices.length; i++)   //find closest vertex to the car
+                {
+                        let vertexPos = {"x":segmentMesh.geometry.vertices[i].x + segments[index].x, "y":segmentMesh.geometry.vertices[i].y + segments[index].y, "z":segmentMesh.geometry.vertices[i].z + segments[index].z};       //Add the absolute coords to the offsets
+                        let distance = Math.sqrt(Math.pow((car.position.x - vertexPos.x), 2) + Math.pow((car.position.y - vertexPos.y), 2) + Math.pow((car.position.z - vertexPos.z), 2));
+                        //console.log(distance);
+                        if(lowest === null)
+                        {
+                                lowest = distance;
+                        }                
+                        if (distance < lowest)
+                        {
+                                lowest = distance;
+                        }
+                }
+         return false;
+
+        //if(Math.sqrt(Math.pow((segment.x - car.position.x), 2) + Math.pow((segment.x - car.position.x), 2))
 }
 
 function update()       //Update vars, move the car accordingly
@@ -386,6 +409,34 @@ function distanceFromAtoB(position1,x2,y2,z2) {  //get position distance from sp
     distance.subVectors(position1, target);
     return distance.length();
 };
+
+function findClosestSegment(car) { //Find the segment closest to the car - for offroad checking
+        let result = {"lowest":null, "segment":null, "index":null} //Includes the segment and its distance to the car
+        let lowest = null;
+        let lowestsegment = null;
+        let index = null;
+        for(let i=0; i<segments.length; i++)
+        {
+                let distance = Math.sqrt(Math.pow(car.position.x - segments[i].x, 2) + Math.pow(car.position.z - segments[i].z, 2));   //Need to only check x position
+                //console.log(distance);
+                if(lowest === null)
+                {
+                        lowest = distance;
+                        index = i;
+                        lowestsegment = segments[i];
+                }                
+                if (distance < lowest)
+                {
+                        lowest = distance;
+                        index = i;
+                        lowestsegment = segments[i];
+                }
+        }
+        result.lowest = lowest;
+        result.segment = lowestsegment;
+        result.index = index;
+        return result;
+}
 
 
 function updateNS()       //Update vars, move the car accordingly (no sensors)
@@ -485,14 +536,17 @@ customElements.define("game-view", class extends HTMLElement {
         //Main loop
         loop(camera, carcube) {
                 //console.log("cc", carcube);
+                //console.log(findClosestSegment(carcube).segment);
                 move(camera, carcube);
                 //check for collisions (maybe not every loop?)
-                collision = checkCollision(carcube);            
+                collision = checkCollision(carcube);
+                offroad = isOffRoad(carcube);   
+                //console.log(offroad);         
                 if(collision)
                 {
                         console.log("Collision");
                 }
-                var or = isOffRoad(camera.position.x);
+                //var or = isOffRoad(camera.position.x);
                 //console.log(or);
                 //camera.position.x = camera.position.x + 0.1;
                 //console.log("loop");
@@ -611,11 +665,12 @@ customElements.define("game-view", class extends HTMLElement {
                         {
                                 segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
                         }
+                        segmentMeshes.push(segment);
 		        scene.add( segment );
                 }
         }
         createCar() {
-                var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+                var geometry = new THREE.BoxGeometry( carWidth, 1, 1 );
                 var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		this.carcube = new THREE.Mesh( geometry, material );
                 this.carcube.position.z = 0;
