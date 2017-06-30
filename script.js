@@ -19,6 +19,15 @@
 */
 'use strict';
 
+//Sliders
+var slider_speed = document.getElementById("slider_speed");
+var slider_speed_div = document.getElementById("slider_speed_amount");
+slider_speed.onchange = () => {
+        speed = slider_speed.value;
+        slider_speed_div.innerHTML = speed;
+        console.log("Speed:", speed);
+};
+
 /* Globals */
 var xcoord_div = document.getElementById("xcoord");
 var ycoord_div = document.getElementById("ycoord");
@@ -73,7 +82,7 @@ var sphereMesh = null;
 
 var x = 0;      //car x coordinate
 var y = 0;      //car y coordinate
-var speed = 5;
+var speed = 0.1;
 var angle = 0;
 var mod = 0;
 
@@ -150,6 +159,15 @@ function toEulerianAngle(quat, out)
         return out;
 }
 
+
+//Functions for the debug text and sliders
+
+function updateSlider(slideAmount)
+{
+alert("error");
+sliderDiv.innerHTML = slideAmount;
+}
+
 function updateText()   //For updating debug text
 {
         roll_div.innerHTML = roll;
@@ -217,7 +235,6 @@ function move(camera, car) //Moves the car(camera)
 {
         if(car !== undefined) {
                 //console.log("cc2", car);
-                speed = 0.05;
                 if(direction == "left")
                 {
                         camera.position.x = camera.position.x - force;
