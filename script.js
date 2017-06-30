@@ -238,18 +238,31 @@ function checkCollision(car) {      //Check if the car is colliding with any oth
         {
                 
         }
-        for (let i=0; i<obstacles.length; i++)   //obstacles - did the car crash into any of the obstacles?
+        for (let i=0; i<obstacles.length; i++)   //did the car crash into any of the obstacles?
         {
-                let collision = car.bb.intersectsBox(obstacles[i].bb);
+                var collision = car.bb.intersectsBox(obstacles[i].bb);
                 if(collision === true)
                 {
-                        console.log("Collision");
+                        //console.log("Collision");
                 }
                 else
                 {
                         //console.log("No collision");
                 }
         }
+        //From https://stemkoski.github.io/Three.js/Collision-Detection.html
+        var originPoint = car.position.clone();
+	for (var vertexIndex = 0; vertexIndex < car.geometry.vertices.length; vertexIndex++)
+	{		
+		var localVertex = car.geometry.vertices[vertexIndex].clone();
+		var globalVertex = localVertex.applyMatrix4( car.matrix );
+		var directionVector = globalVertex.sub( car.position );
+		
+		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+		var collisionResults = ray.intersectObjects( obstacles );
+		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
+			console.log(" Hit ");
+	}	
         //console.log("C check");
 }
 
