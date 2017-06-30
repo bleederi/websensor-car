@@ -39,11 +39,12 @@ var force_div = document.getElementById("force");
 var ut; //debug text update var
 var mv; //movement update var
 
-var canvas = document.getElementById("canvas");
+/* Below for 2D */
+//var canvas = document.getElementById("canvas");
 //resize canvas to fullscreen
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-var ctx = canvas.getContext("2d");
+//canvas.width = window.innerWidth;
+//canvas.height = window.innerHeight;
+//var ctx = canvas.getContext("2d");
 
 var latitude = null;
 var longitude = null;
@@ -91,9 +92,9 @@ var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 10;    //Segment length in pixels
 var roadLength = 300;   //road length in segments
-var roadLength2D = canvas.height/segmentLength;   //road length in segments
+//var roadLength2D = canvas.height/segmentLength;   //road length in segments - 2D
 var roadWidth = 5;    //Road width in pixels
-var roadWidth2D = 0.3*canvas.width;
+//var roadWidth2D = 0.3*canvas.width; //2D
 var rumbleLength = 3;   //Length of a "rumble"
 var curveLength = 5;    //How many segments a curve consists of
 var obstacles = [];     //Array of the obstacles
@@ -103,7 +104,9 @@ var cameraHeight = 1000;
 
 //Timer
 var time=0;
-var timer=setInterval(function(){timer++;},1);  //timer in ms 
+var timer=setInterval(function(){timer++;},1);  //timer in ms
+
+var gameview = null;
 
 //Sensor classes and low-pass filter
 class AbsOriSensor {
@@ -400,8 +403,8 @@ customElements.define("game-view", class extends HTMLElement {
         //THREE.js render stuff
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(this.renderer.domElement);
-
+        gameview = document.body.appendChild(this.renderer.domElement);
+        
         scene = new THREE.Scene();
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 200);
@@ -409,6 +412,16 @@ customElements.define("game-view", class extends HTMLElement {
 
 	this.camera.position.y = 1;
 	this.camera.position.z = 2;
+        console.log(gameview.offsetTop, gameview.offsetLeft);
+
+        //HUD
+        this.hud = document.createElement('div');
+        this.hud.id = "hud";
+        this.hud.innerHTML = "haHAA";
+        this.hud.style.left = gameview.offsetLeft + 20 + "px";
+        this.hud.style.top = gameview.offsetTop + 60 + "px";
+        this.hud.style.position = "absolute";
+        document.body.appendChild(this.hud);
 
         //sphere = new THREE.SphereGeometry(100, 100, 40);
         //sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
@@ -489,15 +502,21 @@ customElements.define("game-view", class extends HTMLElement {
         }
 
         render() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                //ctx.clearRect(0, 0, canvas.width, canvas.height);     //2D
                 //console.log(segments);
                 //Need to draw road before the car               
-                drawRoad2D();     //for 2D
-                drawCar2D();
+                //drawRoad2D();     //for 2D
+                //drawCar2D();  //2D
                 
                 //Rotate cube
 	        //cube.rotation.x += 0.1;
 	        //cube.rotation.y += 0.1;
+
+        //Render HUD
+        this.hud.innerHTML = timer;
+        //For some reason need to always update the position to avoid the HUD disappearing
+        this.hud.style.left = gameview.offsetLeft + 20 + "px";
+        this.hud.style.top = gameview.offsetTop + 60 + "px";
 
                 this.camera.lookAt(this.carcube.position);
                 // Render loop
@@ -622,7 +641,6 @@ customElements.define("game-view", class extends HTMLElement {
                         scene.add( obstacle );
                 }
         }
-
 });
 
 function magnitude(vector)      //Calculate the magnitude of a vector
