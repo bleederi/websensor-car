@@ -232,7 +232,7 @@ function move(camera, car) //Moves the car(camera)
         }
 }
 
-function checkCollision(car) {      //Check if the car is colliding with any other object
+function checkCollision(car) {      //Check if the car is colliding with any other object, return 1 if collision, 0 otherwise
 //TODO: Too slow, need to optimize
         for (let i=0; i<segments.length; i++)   //road segments - is the car on the road?
         {
@@ -250,7 +250,8 @@ function checkCollision(car) {      //Check if the car is colliding with any oth
                         //console.log("No collision");
                 }
         }
-        //From https://stemkoski.github.io/Three.js/Collision-Detection.html
+        //Object collision
+        //Collision using raycasting - From https://stemkoski.github.io/Three.js/Collision-Detection.html
         var originPoint = car.position.clone();
 	for (var vertexIndex = 0; vertexIndex < car.geometry.vertices.length; vertexIndex++)
 	{		
@@ -261,8 +262,8 @@ function checkCollision(car) {      //Check if the car is colliding with any oth
 		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
 		var collisionResults = ray.intersectObjects( obstacles );
 		if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
-			console.log(" Hit ");
-	}	
+                        return 1;
+	}
         //console.log("C check");
 }
 
@@ -466,7 +467,11 @@ customElements.define("game-view", class extends HTMLElement {
         loop(camera, carcube) {
                 //console.log("cc", carcube);
                 move(camera, carcube);
-                checkCollision(carcube);
+                let collision = checkCollision(carcube);
+                if(collision)
+                {
+                        console.log("Collision");
+                }
                 var or = isOffRoad(camera.position.x);
                 //console.log(or);
                 //camera.position.x = camera.position.x + 0.1;
