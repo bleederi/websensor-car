@@ -112,7 +112,7 @@ var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowes
 var gameview = null;
 
 //PhysiJS vars
-var friction = 0;
+var friction = 0.3;
 var restitution = 0;
 
 Physijs.scripts.worker = '/websensor-car/js/physijs_worker.js';
