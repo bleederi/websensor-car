@@ -662,7 +662,7 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
         		//let segment = new THREE.Mesh( geometry, material );
-                        let segment = new Physijs.Mesh( geometry, material , 0);
+                        let segment = new Physijs.Mesh( geometry, material , 1);
                         //cube.position.z = -(roadLength/segmentLength)*j;
                         //console.log(cube.position.z);                        
                         segment.position.z = segments[j].z;
@@ -684,6 +684,8 @@ customElements.define("game-view", class extends HTMLElement {
                 this.carcube = new Physijs.BoxMesh( geometry, material, 1 );
                 this.carcube.position.z = 0;
                 this.carcube.position.y = 0;
+                this.carcube.__dirtyPosition = true;
+                this.carcube.__dirtyRotation = true;
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
         }
