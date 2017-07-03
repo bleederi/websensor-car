@@ -115,6 +115,7 @@ var gameview = null;
 var friction = 0.5;
 var restitution = 0.1;
 var forcefactor = 15;
+var mass = 10;
 
 Physijs.scripts.worker = '/websensor-car/js/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
@@ -713,7 +714,7 @@ var material = Physijs.createMaterial(
     friction,
     restitution
 );
-                this.carcube = new Physijs.BoxMesh( geometry, material, 10 );
+                this.carcube = new Physijs.BoxMesh( geometry, material, mass );
                 //this.carcube.__dirtyPosition = true;
                 //this.carcube.__dirtyRotation = true;
                 //this.carcube.position.z = 0;
