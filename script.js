@@ -250,12 +250,12 @@ function move(camera, car) //Moves the car(camera)
                 if(direction == "left")
                 {
                         //car.position.x = car.position.x - force;
-                        velocity = ({x: car.getLinearVelocity().x-force, y: car.getLinearVelocity().y, z: -speed*100});
+                        velocity = ({x: car.getLinearVelocity().x-2*force, y: car.getLinearVelocity().y, z: -speed*100});
                 }
                 else if (direction == "right")
                 {
                         //car.position.x = car.position.x + force;
-                        velocity = ({x: car.getLinearVelocity().x+force, y: car.getLinearVelocity().y, z: -speed*100});
+                        velocity = ({x: car.getLinearVelocity().x+2*force, y: car.getLinearVelocity().y, z: -speed*100});
                 }
                 camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
