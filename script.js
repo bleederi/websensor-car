@@ -111,8 +111,8 @@ var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowes
 
 var gameview = null;
 
-//Physijs.scripts.worker = '/js/physijs_worker.js';
-//Physijs.scripts.ammo = '/js/ammo.js';
+Physijs.scripts.worker = '/js/physijs_worker.js';
+Physijs.scripts.ammo = 'ammo.js';
 
 //Sensor classes and low-pass filter
 class AbsOriSensor {
@@ -461,8 +461,8 @@ customElements.define("game-view", class extends HTMLElement {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         gameview = document.body.appendChild(this.renderer.domElement);
         
-        scene = new THREE.Scene();
-        //scene = new Physijs.Scene();
+        //scene = new THREE.Scene();
+        scene = new Physijs.Scene();
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 200);
         this.camera.target = new THREE.Vector3(0, 0, 0);
@@ -556,7 +556,7 @@ customElements.define("game-view", class extends HTMLElement {
                 //console.log(or);
                 //camera.position.x = camera.position.x + 0.1;
                 //console.log("loop");
-                //scene.simulate();
+                scene.simulate();
         }
 
         render() {
