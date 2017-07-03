@@ -661,7 +661,8 @@ customElements.define("game-view", class extends HTMLElement {
                 for (let j=0; j<segments.length; j++)
                 {
                         let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
-        		let segment = new THREE.Mesh( geometry, material );
+        		//let segment = new THREE.Mesh( geometry, material );
+                        let segment = new Physijs.Mesh( geometry, material , 0);
                         //cube.position.z = -(roadLength/segmentLength)*j;
                         //console.log(cube.position.z);                        
                         segment.position.z = segments[j].z;
