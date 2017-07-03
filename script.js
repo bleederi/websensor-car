@@ -256,13 +256,13 @@ function move(camera, car) //Moves the car(camera)
                 {
                         //car.position.x = car.position.x - force;
                         velocity = ({x: car.getLinearVelocity().x-2*force, y: car.getLinearVelocity().y, z: -speed*100});
-                        forcev = {x: -10*force, y: 0, z: -20*speed};
+                        forcev = {x: -30*force, y: 0, z: -40*speed};
                 }
                 else if (direction == "right")
                 {
                         //car.position.x = car.position.x + force;
                         velocity = ({x: car.getLinearVelocity().x+2*force, y: car.getLinearVelocity().y, z: -speed*100});
-                        forcev = {x: 10*force, y: 0, z: -20*speed};
+                        forcev = {x: 30*force, y: 0, z: -40*speed};
                 }
                 camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
