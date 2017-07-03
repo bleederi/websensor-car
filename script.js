@@ -113,7 +113,8 @@ var gameview = null;
 
 //PhysiJS vars
 var friction = 0.5;
-var restitution = 0;
+var restitution = 0.1;
+var forcefactor = 15;
 
 Physijs.scripts.worker = '/websensor-car/js/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
@@ -256,13 +257,13 @@ function move(camera, car) //Moves the car(camera)
                 {
                         //car.position.x = car.position.x - force;
                         velocity = ({x: car.getLinearVelocity().x-2*force, y: car.getLinearVelocity().y, z: -speed*100});
-                        forcev = {x: -90*force, y: 0, z: -40*speed};
+                        forcev = {x: -forcefactor*mass*force, y: 0, z: -40*speed};
                 }
                 else if (direction == "right")
                 {
                         //car.position.x = car.position.x + force;
                         velocity = ({x: car.getLinearVelocity().x+2*force, y: car.getLinearVelocity().y, z: -speed*100});
-                        forcev = {x: 90*force, y: 0, z: -40*speed};
+                        forcev = {x: forcefactor*mass*force, y: 0, z: -40*speed};
                 }
                 camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
