@@ -243,8 +243,8 @@ function move2D() //Moves the car
 function move(camera, car) //Moves the car(camera)
 {
         if(car !== undefined) {
-                //car.__dirtyPosition = true;
-                //car.__dirtyRotation = true;
+                car.__dirtyPosition = true;
+                car.__dirtyRotation = true;
                 //console.log("cc2", car);
                 if(direction == "left")
                 {
@@ -257,8 +257,8 @@ function move(camera, car) //Moves the car(camera)
                         car.position.x = car.position.x + force;
                 }
                 camera.position.z = camera.position.z - speed;
-                //car.position.z = car.position.z - speed;
-                car.setLinearVelocity(0, 0, -1);
+                car.position.z = car.position.z - speed;
+                //car.setLinearVelocity(0, 0, -1);
 
         }
 }
