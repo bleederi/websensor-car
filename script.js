@@ -578,7 +578,7 @@ customElements.define("game-view", class extends HTMLElement {
                 offroad = isOffRoad(carcube);
                 if(offroad)
                 {
-                        console.log(offroad);               
+                        console.log("Offroad");               
                 }                
                 if(collision)
                 {
