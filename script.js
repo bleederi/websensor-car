@@ -358,7 +358,7 @@ function isOffRoad(car)      //Determines if the car is off the road or not by c
         let segmentMesh = segmentMeshes[index];
         let lowest = null;
         //console.log(segmentMesh);
-                for (let i = 0; i < segmentMesh.geometry.vertices.length; i++)   //find closest vertex to the car
+        /*        for (let i = 0; i < segmentMesh.geometry.vertices.length; i++)   //find closest vertex to the car
                 {
                         let vertexPos = {"x":segmentMesh.geometry.vertices[i].x + segments[index].x, "y":segmentMesh.geometry.vertices[i].y + segments[index].y, "z":segmentMesh.geometry.vertices[i].z + segments[index].z};       //Add the absolute coords to the offsets
                         let distance = Math.sqrt(Math.pow((car.position.x - vertexPos.x), 2) + Math.pow((car.position.y - vertexPos.y), 2) + Math.pow((car.position.z - vertexPos.z), 2));
@@ -371,8 +371,21 @@ function isOffRoad(car)      //Determines if the car is off the road or not by c
                         {
                                 lowest = distance;
                         }
-                }
-         return false;
+                }*/
+        //Collision using raycasting - From https://stemkoski.github.io/Three.js/Collision-Detection.html
+        var originPoint = car.position.clone();
+	for (var vertexIndex = 0; vertexIndex < car.geometry.vertices.length; vertexIndex++)
+	{		
+		var localVertex = car.geometry.vertices[vertexIndex].clone();
+		var globalVertex = localVertex.applyMatrix4( car.matrix );
+		var directionVector = globalVertex.sub( car.position );
+		
+		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+		var collisionResults = ray.intersectObjects( segmentMeshes );
+		if ( ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )) 
+                        return false;
+	}
+         return true;
 
         //if(Math.sqrt(Math.pow((segment.x - car.position.x), 2) + Math.pow((segment.x - car.position.x), 2))
 }
@@ -541,7 +554,10 @@ customElements.define("game-view", class extends HTMLElement {
                 //check for collisions (maybe not every loop?)
                 collision = checkCollision(carcube);
                 offroad = isOffRoad(carcube);   
-                //console.log(offroad);         
+                if(offroad)
+                {                
+                console.log(offroad);         
+                }                
                 if(collision)
                 {
                         console.log("Collision");
@@ -661,10 +677,10 @@ customElements.define("game-view", class extends HTMLElement {
                         //console.log(segment.position.z);
                         segment.position.x = segments[j].x;
                         segment.position.y = segments[j].y;
-                        if(segment.bb === undefined)    //compute bounding boxes only once
-                        {
+                        //if(segment.bb === undefined)    //compute bounding boxes only once
+                        //{
                                 segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
-                        }
+                        //}
                         segmentMeshes.push(segment);
 		        scene.add( segment );
                 }
