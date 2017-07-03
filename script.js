@@ -664,14 +664,13 @@ customElements.define("game-view", class extends HTMLElement {
                         let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
         		//let segment = new THREE.Mesh( geometry, material );
                         let segment = new Physijs.Mesh( geometry, material , 1);
-                        //cube.position.z = -(roadLength/segmentLength)*j;
+                segment.__dirtyPosition = true;
+                segment.__dirtyRotation = true;
                         //console.log(cube.position.z);                        
                         segment.position.z = segments[j].z;
                         //console.log(segment.position.z);
                         segment.position.x = segments[j].x;
                         segment.position.y = segments[j].y;
-                segment.__dirtyPosition = true;
-                segment.__dirtyRotation = true;
                         //if(segment.bb === undefined)    //compute bounding boxes only once
                         //{
                                 segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
@@ -685,10 +684,10 @@ customElements.define("game-view", class extends HTMLElement {
                 var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		//this.carcube = new THREE.Mesh( geometry, material );
                 this.carcube = new Physijs.BoxMesh( geometry, material, 1 );
-                this.carcube.position.z = 0;
-                this.carcube.position.y = 0;
                 this.carcube.__dirtyPosition = true;
                 this.carcube.__dirtyRotation = true;
+                this.carcube.position.z = 0;
+                this.carcube.position.y = 0;
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
         }
