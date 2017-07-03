@@ -251,15 +251,18 @@ function move(camera, car) //Moves the car(camera)
                 //car.__dirtyRotation = true;
                 //console.log("cc2", car);
                 var velocity = new THREE.Vector3();
+                var force = new THREE.Vector3();
                 if(direction == "left")
                 {
                         //car.position.x = car.position.x - force;
                         velocity = ({x: car.getLinearVelocity().x-2*force, y: car.getLinearVelocity().y, z: -speed*100});
+                        force = {x: -force, y: 0, z: 1};
                 }
                 else if (direction == "right")
                 {
                         //car.position.x = car.position.x + force;
                         velocity = ({x: car.getLinearVelocity().x+2*force, y: car.getLinearVelocity().y, z: -speed*100});
+                        force = {x: force, y: 0, z: 1};
                 }
                 camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
@@ -268,7 +271,8 @@ function move(camera, car) //Moves the car(camera)
 
                 //console.log(velocity);
                 //car.velocity.z = speed;
-                car.setLinearVelocity(velocity);
+                //car.setLinearVelocity(velocity);
+                car.applyCentralImpulse(force);
 
         }
 }
