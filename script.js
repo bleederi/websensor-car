@@ -477,7 +477,7 @@ customElements.define("game-view", class extends HTMLElement {
         
         //scene = new THREE.Scene();
         scene = new Physijs.Scene();
-        scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
+        scene.setGravity(new THREE.Vector3( 0, -1, 0 ));
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 200);
         this.camera.target = new THREE.Vector3(0, 0, 0);
