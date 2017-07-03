@@ -716,7 +716,7 @@ var material = Physijs.createMaterial(
                 this.carcube.position.set(0, 0, 0);
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
-                carcube.setDamping(0, 0);
+                this.carcube.setDamping(0, 0);
         }
 
         createObstacles() {     //Create obstacles that the player has to avoid crashing into
