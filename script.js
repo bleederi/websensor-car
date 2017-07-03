@@ -680,15 +680,15 @@ customElements.define("game-view", class extends HTMLElement {
         }
         drawRoad() {    //Draws the road on the screen
                 var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
-var material = Physijs.createMaterial(
+/*var material = Physijs.createMaterial(
     new THREE.MeshBasicMaterial({ color: "grey" }),
     friction,
     restitution
-);
-                var road = new Physijs.BoxMesh(geometry, material, 0);
+);*/
+                //var road = new Physijs.BoxMesh(geometry, material, 0);
                 for (let j=0; j<segments.length; j++)
                 {
-                        //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
+                        let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
 //var material = Physijs.createMaterial(new THREE.MeshBasicMaterial({ color: segments[j].color }), friction, restitution);
         		//let segment = new THREE.Mesh( geometry, material );
                         let segment = new Physijs.BoxMesh( geometry, material , 0);
@@ -705,10 +705,10 @@ var material = Physijs.createMaterial(
                                 segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
                         //}
                         segmentMeshes.push(segment);
-                        road.merge(segment);
-		        //scene.add( segment );
+                        //road.merge(segment);
+		        scene.add( segment );
                 }
-                scene.add(road);
+                //scene.add(road);
         }
         createCar() {
                 var geometry = new THREE.BoxGeometry( carWidth, 1, 1 );
