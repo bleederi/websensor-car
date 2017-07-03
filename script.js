@@ -262,7 +262,7 @@ function move(camera, car) //Moves the car(camera)
                 {
                         //car.position.x = car.position.x + force;
                         velocity = ({x: car.getLinearVelocity().x+2*force, y: car.getLinearVelocity().y, z: -speed*100});
-                        forcev = {x: force/, y: 0, z: -10*speed};
+                        forcev = {x: force, y: 0, z: -10*speed};
                 }
                 camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
