@@ -246,6 +246,7 @@ function move(camera, car) //Moves the car(camera)
                 //car.__dirtyPosition = true;
                 //car.__dirtyRotation = true;
                 //console.log("cc2", car);
+                var velocity = new THREE.Vector3();
                 if(direction == "left")
                 {
                         camera.position.x = camera.position.x - force;
@@ -258,8 +259,9 @@ function move(camera, car) //Moves the car(camera)
                 }
                 //camera.position.z = camera.position.z - speed;
                 //car.position.z = car.position.z - speed;
-                car.velocity.z = speed;
-                //car.setLinearVelocity(0, 0, -1);
+                velocity = (0, 0, speed);
+                //car.velocity.z = speed;
+                car.setLinearVelocity(speed);
 
         }
 }
