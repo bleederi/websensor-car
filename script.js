@@ -111,6 +111,10 @@ var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowes
 
 var gameview = null;
 
+//PhysiJS vars
+var friction = 0.8; // high friction
+var restitution = 0.3; // low restitution
+
 Physijs.scripts.worker = '/websensor-car/js/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
 
@@ -671,7 +675,12 @@ customElements.define("game-view", class extends HTMLElement {
                 var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
                 for (let j=0; j<segments.length; j++)
                 {
-                        let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
+                        //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
+var material = Physijs.createMaterial(
+    new THREE.MeshBasicMaterial({ color: segments[j].color }),
+    friction,
+    restitution
+);
         		//let segment = new THREE.Mesh( geometry, material );
                         let segment = new Physijs.BoxMesh( geometry, material , 0);
                 //segment.__dirtyPosition = true;
@@ -692,8 +701,13 @@ customElements.define("game-view", class extends HTMLElement {
         }
         createCar() {
                 var geometry = new THREE.BoxGeometry( carWidth, 1, 1 );
-                var material = new THREE.MeshBasicMaterial( { color: "red"} );
+                //var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		//this.carcube = new THREE.Mesh( geometry, material );
+var material = Physijs.createMaterial(
+    new THREE.MeshBasicMaterial({ color: 0x888888 }),
+    friction,
+    restitution
+);
                 this.carcube = new Physijs.BoxMesh( geometry, material, 2 );
                 //this.carcube.__dirtyPosition = true;
                 //this.carcube.__dirtyRotation = true;
