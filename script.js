@@ -112,7 +112,7 @@ var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowes
 var gameview = null;
 
 //PhysiJS vars
-var friction = 0.5;
+var friction = 0;
 var restitution = 0.1;
 var forcefactor = 15;
 var mass = 10;
@@ -723,7 +723,7 @@ var material = Physijs.createMaterial(
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
                 this.carcube.setDamping(0, 0);
-                var forcev2 = {x: 0, y: 0, z: -100*speed};
+                var forcev2 = {x: 0, y: 0, z: -1000*speed};
                 this.carcube.applyCentralForce(forcev2);
         }
 
