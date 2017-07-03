@@ -112,8 +112,8 @@ var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowes
 var gameview = null;
 
 //PhysiJS vars
-var friction = 0.8; // high friction
-var restitution = 0.3; // low restitution
+var friction = 0;
+var restitution = 1;
 
 Physijs.scripts.worker = '/websensor-car/js/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
@@ -704,7 +704,7 @@ var material = Physijs.createMaterial(
                 //var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		//this.carcube = new THREE.Mesh( geometry, material );
 var material = Physijs.createMaterial(
-    new THREE.MeshBasicMaterial({ color: 0x888888 }),
+    new THREE.MeshBasicMaterial({ color: "red" }),
     friction,
     restitution
 );
