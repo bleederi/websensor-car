@@ -258,7 +258,7 @@ function move(camera, car) //Moves the car(camera)
                 }
                 camera.position.z = camera.position.z - speed;
                 //car.position.z = car.position.z - speed;
-                //car.setLinearVelocity(0, 0, -1);
+                car.setLinearVelocity(0, 0, -1);
 
         }
 }
@@ -693,7 +693,7 @@ customElements.define("game-view", class extends HTMLElement {
                 //this.carcube.__dirtyRotation = true;
                 //this.carcube.position.z = 0;
                 //this.carcube.position.y = 0;
-                this.carcube.position.set(0, 5, 0);
+                this.carcube.position.set(0, 1, 0);
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
         }
