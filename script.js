@@ -681,7 +681,7 @@ customElements.define("game-view", class extends HTMLElement {
         drawRoad() {    //Draws the road on the screen
                 var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
 var material = Physijs.createMaterial(
-    new THREE.MeshBasicMaterial({ color: segments[j].color }),
+    new THREE.MeshBasicMaterial({ color: "grey" }),
     friction,
     restitution
 );
