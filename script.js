@@ -688,7 +688,7 @@ customElements.define("game-view", class extends HTMLElement {
                 var geometry = new THREE.BoxGeometry( carWidth, 1, 1 );
                 var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		//this.carcube = new THREE.Mesh( geometry, material );
-                this.carcube = new Physijs.BoxMesh( geometry, material, 0 );
+                this.carcube = new Physijs.BoxMesh( geometry, material, 2 );
                 this.carcube.__dirtyPosition = true;
                 this.carcube.__dirtyRotation = true;
                 //this.carcube.position.z = 0;
