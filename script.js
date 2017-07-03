@@ -544,6 +544,7 @@ customElements.define("game-view", class extends HTMLElement {
         }
         //Main loop
         loop(camera, carcube) {
+                scene.simulate();
                 //console.log("cc", carcube);
                 //cons**ole.log(findClosestSegment(carcube).segment);
                 move(camera, carcube);
@@ -559,7 +560,6 @@ customElements.define("game-view", class extends HTMLElement {
                 //console.log(or);
                 //camera.position.x = camera.position.x + 0.1;
                 //console.log("loop");
-                scene.simulate();
         }
 
         render() {
