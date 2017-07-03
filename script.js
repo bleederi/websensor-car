@@ -680,15 +680,16 @@ customElements.define("game-view", class extends HTMLElement {
         }
         drawRoad() {    //Draws the road on the screen
                 var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
-                road = new Physijs.BoxMesh();
-                for (let j=0; j<segments.length; j++)
-                {
-                        //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
 var material = Physijs.createMaterial(
     new THREE.MeshBasicMaterial({ color: segments[j].color }),
     friction,
     restitution
 );
+                road = new Physijs.BoxMesh();
+                for (let j=0; j<segments.length; j++)
+                {
+                        //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
+//var material = Physijs.createMaterial(new THREE.MeshBasicMaterial({ color: segments[j].color }), friction, restitution);
         		//let segment = new THREE.Mesh( geometry, material );
                         let segment = new Physijs.BoxMesh( geometry, material , 0);
                 //segment.__dirtyPosition = true;
