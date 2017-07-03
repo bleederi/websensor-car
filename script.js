@@ -113,7 +113,7 @@ var gameview = null;
 
 //PhysiJS vars
 var friction = 0;
-var restitution = 0.1;
+var restitution = 0;
 
 Physijs.scripts.worker = '/websensor-car/js/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
