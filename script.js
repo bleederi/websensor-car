@@ -243,6 +243,8 @@ function move2D() //Moves the car
 function move(camera, car) //Moves the car(camera)
 {
         if(car !== undefined) {
+                car.__dirtyPosition = true;
+                car.__dirtyRotation = true;
                 //console.log("cc2", car);
                 if(direction == "left")
                 {
