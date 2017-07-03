@@ -698,7 +698,7 @@ customElements.define("game-view", class extends HTMLElement {
                 //this.carcube.__dirtyRotation = true;
                 //this.carcube.position.z = 0;
                 //this.carcube.position.y = 0;
-                this.carcube.position.set(0, 1, 0);
+                this.carcube.position.set(0, 0, 0);
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
         }
