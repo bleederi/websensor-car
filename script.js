@@ -111,7 +111,7 @@ var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowes
 
 var gameview = null;
 
-Physijs.scripts.worker = '../physijs_worker.js';
+Physijs.scripts.worker = 'physijs_worker.js';
 Physijs.scripts.ammo = '/js/ammo.js';
 
 //Sensor classes and low-pass filter
