@@ -111,8 +111,8 @@ var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowes
 
 var gameview = null;
 
-    Physijs.scripts.worker = '/js/physijs_worker.js';
-    Physijs.scripts.ammo = '/js/ammo.js';
+    //Physijs.scripts.worker = '/js/physijs_worker.js';
+    //Physijs.scripts.ammo = '/js/ammo.js';
 
 //Sensor classes and low-pass filter
 class AbsOriSensor {
@@ -461,8 +461,8 @@ customElements.define("game-view", class extends HTMLElement {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         gameview = document.body.appendChild(this.renderer.domElement);
         
-        //scene = new THREE.Scene();
-        scene = new Physijs.Scene();
+        scene = new THREE.Scene();
+        //scene = new Physijs.Scene();
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 200);
         this.camera.target = new THREE.Vector3(0, 0, 0);
@@ -542,7 +542,7 @@ customElements.define("game-view", class extends HTMLElement {
         //Main loop
         loop(camera, carcube) {
                 //console.log("cc", carcube);
-                //console.log(findClosestSegment(carcube).segment);
+                //cons**ole.log(findClosestSegment(carcube).segment);
                 move(camera, carcube);
                 //check for collisions (maybe not every loop?)
                 collision = checkCollision(carcube);
