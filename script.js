@@ -685,7 +685,7 @@ var material = Physijs.createMaterial(
     friction,
     restitution
 );
-                road = new Physijs.BoxMesh();
+                var road = new Physijs.BoxMesh(geometry, material, 0);
                 for (let j=0; j<segments.length; j++)
                 {
                         //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
