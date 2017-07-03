@@ -113,7 +113,7 @@ var gameview = null;
 
 //PhysiJS vars
 var friction = 0;
-var restitution = 0.1;
+var restitution = 0;
 var forcefactor = 15;
 var mass = 10;
 
