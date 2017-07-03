@@ -274,7 +274,7 @@ function move(camera, car) //Moves the car(camera)
                 //console.log(velocity);
                 //car.velocity.z = speed;
                 //car.setLinearVelocity(velocity);
-                car.applyCentralForce(forcev);
+                //car.applyCentralForce(forcev);
 
         }
 }
@@ -723,6 +723,8 @@ var material = Physijs.createMaterial(
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
                 this.carcube.setDamping(0, 0);
+                var forcev2 = {x: 0, y: 0, z: -100*speed};
+                car.applyCentralForce(forcev2);
         }
 
         createObstacles() {     //Create obstacles that the player has to avoid crashing into
