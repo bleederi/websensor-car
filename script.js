@@ -112,7 +112,7 @@ var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowes
 var gameview = null;
 
 //PhysiJS vars
-var friction = 0.3;
+var friction = 0.5;
 var restitution = 0;
 
 Physijs.scripts.worker = '/websensor-car/js/physijs_worker.js';
@@ -709,6 +709,7 @@ var material = Physijs.createMaterial(
     restitution
 );
                 this.carcube = new Physijs.BoxMesh( geometry, material, 2 );
+                carcube.setDamping(0, 0);
                 //this.carcube.__dirtyPosition = true;
                 //this.carcube.__dirtyRotation = true;
                 //this.carcube.position.z = 0;
