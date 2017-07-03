@@ -679,7 +679,8 @@ customElements.define("game-view", class extends HTMLElement {
         createCar() {
                 var geometry = new THREE.BoxGeometry( carWidth, 1, 1 );
                 var material = new THREE.MeshBasicMaterial( { color: "red"} );
-		this.carcube = new THREE.Mesh( geometry, material );
+		//this.carcube = new THREE.Mesh( geometry, material );
+                this.carcube = new Physijs.BoxMesh( geometry, material, 1 );
                 this.carcube.position.z = 0;
                 this.carcube.position.y = 0;
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
