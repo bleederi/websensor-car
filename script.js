@@ -256,13 +256,13 @@ function move(camera, car) //Moves the car(camera)
                 {
                         //car.position.x = car.position.x - force;
                         velocity = ({x: car.getLinearVelocity().x-2*force, y: car.getLinearVelocity().y, z: -speed*100});
-                        forcev = {x: -force/10, y: 0, z: -speed/5};
+                        forcev = {x: -force/10, y: 0, z: speed/5};
                 }
                 else if (direction == "right")
                 {
                         //car.position.x = car.position.x + force;
                         velocity = ({x: car.getLinearVelocity().x+2*force, y: car.getLinearVelocity().y, z: -speed*100});
-                        forcev = {x: force/10, y: 0, z: -speed/5};
+                        forcev = {x: force/10, y: 0, z: -speed};
                 }
                 camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
@@ -272,7 +272,7 @@ function move(camera, car) //Moves the car(camera)
                 //console.log(velocity);
                 //car.velocity.z = speed;
                 //car.setLinearVelocity(velocity);
-                car.applyCentralImpulse(forcev);
+                car.applyCentralForce(forcev);
 
         }
 }
@@ -712,7 +712,7 @@ var material = Physijs.createMaterial(
     friction,
     restitution
 );
-                this.carcube = new Physijs.BoxMesh( geometry, material, 2 );
+                this.carcube = new Physijs.BoxMesh( geometry, material, 10 );
                 //this.carcube.__dirtyPosition = true;
                 //this.carcube.__dirtyRotation = true;
                 //this.carcube.position.z = 0;
