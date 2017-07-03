@@ -100,6 +100,7 @@ var rumbleLength = 3;   //Length of a "rumble"
 var curveLength = 5;    //How many segments a curve consists of
 var obstacles = [];     //Array of the obstacles
 var segmentMeshes = [];   //Array of the segment meshes
+var road = null;  //Segments merged into one
 var carWidth = 1;
 
 //Camera vars
@@ -679,6 +680,7 @@ customElements.define("game-view", class extends HTMLElement {
         }
         drawRoad() {    //Draws the road on the screen
                 var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
+                road = new Physijs.BoxGeometry();
                 for (let j=0; j<segments.length; j++)
                 {
                         //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
@@ -702,8 +704,10 @@ var material = Physijs.createMaterial(
                                 segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
                         //}
                         segmentMeshes.push(segment);
-		        scene.add( segment );
+                        road.merge(segment);
+		        //scene.add( segment );
                 }
+                scene.add(road);
         }
         createCar() {
                 var geometry = new THREE.BoxGeometry( carWidth, 1, 1 );
