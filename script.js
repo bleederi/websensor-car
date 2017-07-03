@@ -273,7 +273,7 @@ function move(camera, car) //Moves the car(camera)
 
                 //console.log(velocity);
                 //car.velocity.z = speed;
-                //car.setLinearVelocity(velocity);
+                car.setLinearVelocity(velocity);
                 //car.applyCentralForce(forcev);
 
         }
