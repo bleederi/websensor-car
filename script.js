@@ -667,9 +667,9 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
         		//let segment = new THREE.Mesh( geometry, material );
-                        let segment = new Physijs.Mesh( geometry, material , 20);
-                segment.__dirtyPosition = true;
-                segment.__dirtyRotation = true;
+                        let segment = new Physijs.Mesh( geometry, material , 0);
+                //segment.__dirtyPosition = true;
+                //segment.__dirtyRotation = true;
                         //console.log(cube.position.z);                        
                         segment.position.z = segments[j].z;
                         //console.log(segment.position.z);
