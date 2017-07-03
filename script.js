@@ -84,7 +84,7 @@ var sphereMesh = null;
 
 var x = 0;      //car x coordinate
 var y = 0;      //car y coordinate
-var speed = 0.1;
+var speed = 10;        //0.1 for threeJS, 10 for Physijs
 var angle = 0;
 var mod = 0;
 
@@ -257,10 +257,10 @@ function move(camera, car) //Moves the car(camera)
                         camera.position.x = camera.position.x + force;
                         car.position.x = car.position.x + force;
                 }
-                //camera.position.z = camera.position.z - speed;
+                camera.position.z = camera.position.z - speed;
                 //car.position.z = car.position.z - speed;
                 //car.rotation.set(0, 0, 0);
-                velocity = ({x: car.getLinearVelocity().x, y: car.getLinearVelocity().y, z: -speed*100});
+                velocity = ({x: car.getLinearVelocity().x, y: car.getLinearVelocity().y, z: -speed});
                 //console.log(velocity);
                 //car.velocity.z = speed;
                 car.setLinearVelocity(velocity);
