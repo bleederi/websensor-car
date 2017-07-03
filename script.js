@@ -243,8 +243,8 @@ function move2D() //Moves the car
 function move(camera, car) //Moves the car(camera)
 {
         if(car !== undefined) {
-                car.__dirtyPosition = true;
-                car.__dirtyRotation = true;
+                //car.__dirtyPosition = true;
+                //car.__dirtyRotation = true;
                 //console.log("cc2", car);
                 if(direction == "left")
                 {
@@ -257,7 +257,7 @@ function move(camera, car) //Moves the car(camera)
                         car.position.x = car.position.x + force;
                 }
                 camera.position.z = camera.position.z - speed;
-                car.position.z = car.position.z - speed;
+                //car.position.z = car.position.z - speed;
                 //car.setLinearVelocity(0, 0, -1);
 
         }
@@ -689,8 +689,8 @@ customElements.define("game-view", class extends HTMLElement {
                 var material = new THREE.MeshBasicMaterial( { color: "red"} );
 		//this.carcube = new THREE.Mesh( geometry, material );
                 this.carcube = new Physijs.BoxMesh( geometry, material, 2 );
-                this.carcube.__dirtyPosition = true;
-                this.carcube.__dirtyRotation = true;
+                //this.carcube.__dirtyPosition = true;
+                //this.carcube.__dirtyRotation = true;
                 //this.carcube.position.z = 0;
                 //this.carcube.position.y = 0;
                 this.carcube.position.set(0, 5, 0);
