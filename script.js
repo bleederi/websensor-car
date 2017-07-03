@@ -670,8 +670,8 @@ customElements.define("game-view", class extends HTMLElement {
                         //console.log(segment.position.z);
                         segment.position.x = segments[j].x;
                         segment.position.y = segments[j].y;
-                this.carcube.__dirtyPosition = true;
-                this.carcube.__dirtyRotation = true;
+                segment.__dirtyPosition = true;
+                segment.__dirtyRotation = true;
                         //if(segment.bb === undefined)    //compute bounding boxes only once
                         //{
                                 segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
