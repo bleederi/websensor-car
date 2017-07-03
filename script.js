@@ -678,7 +678,7 @@ customElements.define("game-view", class extends HTMLElement {
                 }
         }
         drawRoad() {    //Draws the road on the screen
-                var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
+                var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength+2 );
                 for (let j=0; j<segments.length; j++)
                 {
                         //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
