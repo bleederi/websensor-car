@@ -257,7 +257,9 @@ function move(camera, car) //Moves the car(camera)
                         car.position.x = car.position.x + force;
                 }
                 camera.position.z = camera.position.z - speed;
-                car.position.z = car.position.z - speed;
+                //car.position.z = car.position.z - speed;
+car.setLinearVelocity(0, 0, speed);
+
         }
 }
 
@@ -665,7 +667,7 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
         		//let segment = new THREE.Mesh( geometry, material );
-                        let segment = new Physijs.Mesh( geometry, material , 1);
+                        let segment = new Physijs.Mesh( geometry, material , 20);
                 segment.__dirtyPosition = true;
                 segment.__dirtyRotation = true;
                         //console.log(cube.position.z);                        
