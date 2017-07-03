@@ -111,6 +111,9 @@ var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowes
 
 var gameview = null;
 
+    Physijs.scripts.worker = '/js/physijs_worker.js';
+    Physijs.scripts.ammo = '/js/ammo.js';
+
 //Sensor classes and low-pass filter
 class AbsOriSensor {
         constructor() {
@@ -371,20 +374,9 @@ function isOffRoad(car)      //Determines if the car is off the road or not by c
                         {
                                 lowest = distance;
                         }
+                //console.log(lowest);
                 }
-        /*//Collision using raycasting - From https://stemkoski.github.io/Three.js/Collision-Detection.html
-        var originPoint = car.position.clone();
-	for (var vertexIndex = 0; vertexIndex < car.geometry.vertices.length; vertexIndex++)
-	{		
-		var localVertex = car.geometry.vertices[vertexIndex].clone();
-		var globalVertex = localVertex.applyMatrix4( car.matrix );
-		var directionVector = globalVertex.sub( car.position );
-		
-		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-		var collisionResults = ray.intersectObjects( segmentMeshes );
-		if ( ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )) 
-                        return false;
-	}*/
+        //Cast ray downwards from the car, if it intersects the road, then we are on the road
          return true;
 
         //if(Math.sqrt(Math.pow((segment.x - car.position.x), 2) + Math.pow((segment.x - car.position.x), 2))
@@ -469,7 +461,8 @@ customElements.define("game-view", class extends HTMLElement {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         gameview = document.body.appendChild(this.renderer.domElement);
         
-        scene = new THREE.Scene();
+        //scene = new THREE.Scene();
+        scene = new Physijs.Scene();
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 200);
         this.camera.target = new THREE.Vector3(0, 0, 0);
@@ -554,7 +547,7 @@ customElements.define("game-view", class extends HTMLElement {
                 //check for collisions (maybe not every loop?)
                 collision = checkCollision(carcube);
                 offroad = isOffRoad(carcube);              
-                console.log(offroad);               
+                //console.log(offroad);               
                 if(collision)
                 {
                         console.log("Collision");
