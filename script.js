@@ -249,14 +249,13 @@ function move(camera, car) //Moves the car(camera)
                 var velocity = new THREE.Vector3();
                 if(direction == "left")
                 {
-                        camera.position.x = camera.position.x - force;
                         car.position.x = car.position.x - force;
                 }
                 else if (direction == "right")
                 {
-                        camera.position.x = camera.position.x + force;
                         car.position.x = car.position.x + force;
                 }
+                camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
                 //car.position.z = car.position.z - speed;
                 //car.rotation.set(0, 0, 0);
