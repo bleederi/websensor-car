@@ -724,7 +724,7 @@ var material = Physijs.createMaterial(
 	        scene.add( this.carcube );
                 this.carcube.setDamping(0, 0);
                 var forcev2 = {x: 0, y: 0, z: -100*speed};
-                car.applyCentralForce(forcev2);
+                this.carcube.applyCentralForce(forcev2);
         }
 
         createObstacles() {     //Create obstacles that the player has to avoid crashing into
