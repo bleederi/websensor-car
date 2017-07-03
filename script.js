@@ -260,7 +260,7 @@ function move(camera, car) //Moves the car(camera)
                 //camera.position.z = camera.position.z - speed;
                 //car.position.z = car.position.z - speed;
                 //car.rotation.set(0, 0, 0);
-                velocity = (car.getLinearVelocity().x, car.getLinearVelocity().y, speed);
+                velocity = ({x: car.getLinearVelocity().x, y: car.getLinearVelocity().y, z: speed});
                 //car.velocity.z = speed;
                 //car.setLinearVelocity(velocity);
 
