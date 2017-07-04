@@ -582,7 +582,7 @@ customElements.define("game-view", class extends HTMLElement {
                 //console.log("cc", carcube);
                 //cons**ole.log(findClosestSegment(carcube).segment);
                 move(camera, carcube);
-                if(timerVar === null)   //start timer
+                if(timerVar === null && carcube.position.z < 0)   //start timer
                 {
                         timerVar=setInterval(function(){time = time + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
                 }
