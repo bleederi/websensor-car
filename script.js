@@ -592,7 +592,7 @@ customElements.define("game-view", class extends HTMLElement {
                         console.log("Offroad");
                         gameOver();         
                 }   
-                //speed = 0.1 + Math.abs(carcube.position.z);  //increase speed bit by bit             
+                speed = 0.1 + Math.abs(carcube.position.z/1000);  //increase speed bit by bit             
                 /*if(collision)
                 {
                         console.log("Collision");
