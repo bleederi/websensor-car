@@ -614,7 +614,7 @@ customElements.define("game-view", class extends HTMLElement {
 
         //Render HUD
         //this.hud.innerHTML = time;
-        this.hud.innerHTML = this.carcube.z;
+        this.hud.innerHTML = -this.carcube.position.z;
         //For some reason need to always update the position to avoid the HUD disappearinga
         this.hud.style.left = gameview.offsetLeft + 20 + "px";
         this.hud.style.top = gameview.offsetTop + 60 + "px";
