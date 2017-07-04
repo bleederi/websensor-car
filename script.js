@@ -697,7 +697,8 @@ customElements.define("game-view", class extends HTMLElement {
                 //var road = new Physijs.BoxMesh(geometry, material, 0);
                 for (let j=0; j<segments.length; j++)
                 {
-                        let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
+                        //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
+                        let material = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('road.png') } );
 //var material = Physijs.createMaterial(new THREE.MeshBasicMaterial({ color: segments[j].color }), friction, restitution);
         		//let segment = new THREE.Mesh( geometry, material );
                         let segment = new Physijs.BoxMesh( geometry, material , 0);
@@ -722,19 +723,18 @@ customElements.define("game-view", class extends HTMLElement {
         createCar() {
                 var geometry = new THREE.BoxGeometry( carWidth, 1, 1 );
                 //var material = new THREE.MeshBasicMaterial( { color: "red"} );
-                var texture = new THREE.TextureLoader().load( "textures/water.jpg" );
 		//this.carcube = new THREE.Mesh( geometry, material );
-                /*var material = Physijs.createMaterial(
+                var material = Physijs.createMaterial(
                     new THREE.MeshBasicMaterial({ color: "red" }),
                     friction,
                     restitution
                 );
-                */
+/*
 var material = Physijs.createMaterial(
                     new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('road.png') }),
                     friction,
                     restitution
-                );
+                );*/
                 this.carcube = new Physijs.BoxMesh( geometry, material, mass );
                 //this.carcube.__dirtyPosition = true;
                 //this.carcube.__dirtyRotation = true;
