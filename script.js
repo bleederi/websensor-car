@@ -743,7 +743,7 @@ customElements.define("game-view", class extends HTMLElement {
                 var material = new THREE.MeshBasicMaterial( { color : 0xff0000, side:"THREE.DoubleSide" } );
 
                 // Create the final object to add to the scene
-                var mesh = new Physijs.ConcaveMesh( tubegeometry, material, 0 );
+                var mesh = new Physijs.ConvexMesh( tubegeometry, material, 0 );
                 scene.add(mesh);
                 //scene.add(road);
         }
