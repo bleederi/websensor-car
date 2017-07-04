@@ -721,17 +721,24 @@ customElements.define("game-view", class extends HTMLElement {
                         //road.merge(segment);
 		        scene.add( segment );
                 }
-                var curve = new THREE.CubicBezierCurve3(
+                var curve1 = new THREE.CubicBezierCurve3(
 	                new THREE.Vector3( 0, 2, 0 ),
 	                new THREE.Vector3( 5, 2, -10 ),
 	                new THREE.Vector3( -5, 2, -20 ),
 	                new THREE.Vector3( 0, 2, -30 )
                 );
+                var curve2 = new THREE.CubicBezierCurve3(
+	                new THREE.Vector3( 0, 2, -30 ),
+	                new THREE.Vector3( 5, 2, -40 ),
+	                new THREE.Vector3( -5, 2, -50 ),
+	                new THREE.Vector3( 0, 2, -60 )
+                );
+                var curvePath = new THREE.CurvePath( [curve1, curve2], false);
                 var geometry = new THREE.Geometry();
-                var tubegeometry = new THREE.TubeBufferGeometry( curve, 20, 10, 64, false );
+                var tubegeometry = new THREE.TubeBufferGeometry( curvePath, 20, 10, 64, false );
                 tubegeometry.vertices = curve.getPoints( 50 );
 
-                var material = new THREE.MeshBasicMaterial( { color : 0xff0000, side:"THREE.BackSide" } );
+                var material = new THREE.MeshBasicMaterial( { color : 0xff0000, side:"THREE.DoubleSide" } );
 
                 // Create the final object to add to the scene
                 var mesh = new Physijs.ConvexMesh( tubegeometry, material, 0 );
