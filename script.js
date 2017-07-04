@@ -409,6 +409,13 @@ function isOffRoad(car)      //Determines if the car is off the road or not by c
         //if(Math.sqrt(Math.pow((segment.x - car.position.x), 2) + Math.pow((segment.x - car.position.x), 2))
 }
 
+function gameOver() {
+        var score = timer;
+        //Stop game loop
+        clearInterval(loopvar);
+        clearInterval(timer);
+}
+
 function update()       //Update vars, move the car accordingly
 {
         direction = getDirection(roll, pitch, yaw, mode);
@@ -581,7 +588,7 @@ customElements.define("game-view", class extends HTMLElement {
                 if(offroad)
                 {
                         console.log("Offroad");
-                        this.gameOver();         
+                        gameOver();         
                 }                
                 if(collision)
                 {
@@ -614,13 +621,6 @@ customElements.define("game-view", class extends HTMLElement {
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
-        }
-        
-        gameOver() {
-                var score = timer;
-                //Stop game loop
-                clearInterval(loopvar);
-                clearInterval(timer);
         }
 
         buildRoad() {
