@@ -722,12 +722,19 @@ customElements.define("game-view", class extends HTMLElement {
         createCar() {
                 var geometry = new THREE.BoxGeometry( carWidth, 1, 1 );
                 //var material = new THREE.MeshBasicMaterial( { color: "red"} );
+                var texture = new THREE.TextureLoader().load( "textures/water.jpg" );
 		//this.carcube = new THREE.Mesh( geometry, material );
+                /*var material = Physijs.createMaterial(
+                    new THREE.MeshBasicMaterial({ color: "red" }),
+                    friction,
+                    restitution
+                );
+                */
 var material = Physijs.createMaterial(
-    new THREE.MeshBasicMaterial({ color: "red" }),
-    friction,
-    restitution
-);
+                    new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('road.png') }),
+                    friction,
+                    restitution
+                );
                 this.carcube = new Physijs.BoxMesh( geometry, material, mass );
                 //this.carcube.__dirtyPosition = true;
                 //this.carcube.__dirtyRotation = true;
@@ -736,7 +743,7 @@ var material = Physijs.createMaterial(
                 this.carcube.position.set(0, 0, 0);
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
-                this.carcube.setDamping(0, 0);
+                this.carcube.setDamping(0.1, 0.1);
                 var forcev2 = {x: 0, y: 0, z: -1000*speed};
                 this.carcube.applyCentralImpulse(forcev2);
         }
