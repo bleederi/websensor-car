@@ -108,7 +108,7 @@ var cameraHeight = 1000;
 
 //Timer
 var time=0;
-var timerVar=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
+var timerVar=setInterval(function(){time = time + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
 
 var gameview = null;
 
@@ -410,7 +410,7 @@ function isOffRoad(car)      //Determines if the car is off the road or not by c
 }
 
 function gameOver() {
-        var score = timer;
+        var score = time;
         //Stop game loop
         clearInterval(loopvar);
         clearInterval(timerVar);
@@ -612,7 +612,7 @@ customElements.define("game-view", class extends HTMLElement {
 	        //cube.rotation.y += 0.1;
 
         //Render HUD
-        this.hud.innerHTML = timer;
+        this.hud.innerHTML = time;
         //For some reason need to always update the position to avoid the HUD disappearinga
         this.hud.style.left = gameview.offsetLeft + 20 + "px";
         this.hud.style.top = gameview.offsetTop + 60 + "px";
