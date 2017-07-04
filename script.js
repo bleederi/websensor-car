@@ -499,6 +499,8 @@ customElements.define("game-view", class extends HTMLElement {
 	this.camera.position.z = 2;
         //console.log(gameview.offsetTop, gameview.offsetLeft);
 
+        this.loader = new THREE.TextureLoader();
+
         //HUD
         this.hud = document.createElement('div');
         this.hud.id = "hud";
@@ -698,7 +700,8 @@ customElements.define("game-view", class extends HTMLElement {
                 for (let j=0; j<segments.length; j++)
                 {
                         //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
-                        let material = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('road.png') } );
+                        var texture = this.loader.load('road.png');     //should the callback be used here?
+                        let material = new THREE.MeshBasicMaterial( { map: texture } );
 //var material = Physijs.createMaterial(new THREE.MeshBasicMaterial({ color: segments[j].color }), friction, restitution);
         		//let segment = new THREE.Mesh( geometry, material );
                         let segment = new Physijs.BoxMesh( geometry, material , 0);
