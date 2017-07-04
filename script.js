@@ -584,17 +584,17 @@ customElements.define("game-view", class extends HTMLElement {
                 //cons**ole.log(findClosestSegment(carcube).segment);
                 move(camera, carcube);
                 //check for collisions (maybe not every loop?)
-                collision = checkCollision(carcube);
+                //collision = checkCollision(carcube);
                 offroad = isOffRoad(carcube);
                 if(offroad)
                 {
                         console.log("Offroad");
                         gameOver();         
                 }                
-                if(collision)
+                /*if(collision)
                 {
                         console.log("Collision");
-                }
+                }*/
                 //var or = isOffRoad(camera.position.x);
                 //console.log(or);
                 //camera.position.x = camera.position.x + 0.1;
