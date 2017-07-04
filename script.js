@@ -108,7 +108,7 @@ var cameraHeight = 1000;
 
 //Timer
 var time=0;
-var timer=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
+var timerVar=setInterval(function(){timer = timer + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
 
 var gameview = null;
 
@@ -413,7 +413,7 @@ function gameOver() {
         var score = timer;
         //Stop game loop
         clearInterval(loopvar);
-        clearInterval(timer);
+        clearInterval(timerVar);
 }
 
 function update()       //Update vars, move the car accordingly
