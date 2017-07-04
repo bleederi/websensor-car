@@ -697,6 +697,7 @@ customElements.define("game-view", class extends HTMLElement {
     restitution
 );*/
                 //var road = new Physijs.BoxMesh(geometry, material, 0);
+                var road;
                 for (let j=0; j<segments.length; j++)
                 {
                         //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
@@ -718,9 +719,11 @@ customElements.define("game-view", class extends HTMLElement {
                                 segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
                         //}
                         segmentMeshes.push(segment);
+                        road.add(segment);
                         //road.merge(segment);
-		        scene.add( segment );
+		        //scene.add( segment );
                 }
+                scene.add(road);
                 var curve1 = new THREE.CubicBezierCurve3(
 	                new THREE.Vector3( 0, 2, 0 ),
 	                new THREE.Vector3( 5, 2, -10 ),
@@ -743,8 +746,8 @@ customElements.define("game-view", class extends HTMLElement {
                 var material = new THREE.MeshBasicMaterial( { color : 0xff0000, side:"THREE.DoubleSide" } );
 
                 // Create the final object to add to the scene
-                var mesh = new Physijs.ConvexMesh( tubegeometry, material, 0 );
-                scene.add(mesh);
+                //var mesh = new Physijs.ConvexMesh( tubegeometry, material, 0 );
+                //scene.add(mesh);
                 //scene.add(road);
         }
         createCar() {
