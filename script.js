@@ -580,7 +580,10 @@ customElements.define("game-view", class extends HTMLElement {
                 offroad = isOffRoad(carcube);
                 if(offroad)
                 {
-                        console.log("Offroad");               
+                        console.log("Offroad");
+                        var score = timer;
+                        //Stop game loop
+                        clearInterval(loopvar);            
                 }                
                 if(collision)
                 {
@@ -691,11 +694,11 @@ customElements.define("game-view", class extends HTMLElement {
         }
         drawRoad() {    //Draws the road on the screen
                 var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
-var materialRoad = Physijs.createMaterial(
-    new THREE.MeshBasicMaterial({ color: "grey" }),
-    friction,
-    restitution
-);
+                var materialRoad = Physijs.createMaterial(
+                    new THREE.MeshBasicMaterial({ color: "grey" }),
+                    friction,
+                    restitution
+                );
                 var road = new Physijs.BoxMesh(geometry, materialRoad, 0);
                 //var road = new Physijs.BoxMesh();
                 for (let j=0; j<segments.length; j++)
