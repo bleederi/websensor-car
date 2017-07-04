@@ -722,10 +722,10 @@ customElements.define("game-view", class extends HTMLElement {
 		        scene.add( segment );
                 }
                 var curve = new THREE.CubicBezierCurve3(
-	                new THREE.Vector3( -25, 0, -20 ),
-	                new THREE.Vector3( -20, 15, -20 ),
-	                new THREE.Vector3( 5, 15, -20 ),
-	                new THREE.Vector3( -5, 0, -20 )
+	                new THREE.Vector3( 0, 2, 0 ),
+	                new THREE.Vector3( 5, 2, -10 ),
+	                new THREE.Vector3( -5, 2, -20 ),
+	                new THREE.Vector3( 0, 2, -30 )
                 );
                 var geometry = new THREE.Geometry();
                 geometry.vertices = curve.getPoints( 50 );
