@@ -574,7 +574,6 @@ customElements.define("game-view", class extends HTMLElement {
                 this.createCar();
                 this.createObstacles();
                 this.render();
-                timerVar=setInterval(function(){time = time + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
                 loopvar = setInterval(this.loop.bind(null, this.camera, this.carcube), step);
         }
         //Main loop
@@ -583,6 +582,10 @@ customElements.define("game-view", class extends HTMLElement {
                 //console.log("cc", carcube);
                 //cons**ole.log(findClosestSegment(carcube).segment);
                 move(camera, carcube);
+                if(timerVar === null)   //start timer
+                {
+                        timerVar=setInterval(function(){time = time + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
+                }
                 //check for collisions (maybe not every loop?)
                 collision = checkCollision(carcube);
                 offroad = isOffRoad(carcube);
