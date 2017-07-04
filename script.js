@@ -728,10 +728,10 @@ customElements.define("game-view", class extends HTMLElement {
 	                new THREE.Vector3( 0, 2, -30 )
                 );
                 var geometry = new THREE.Geometry();
-                var tubegeometry = new THREE.TubeBufferGeometry( curve, 20, 5, 8, false );
+                var tubegeometry = new THREE.TubeBufferGeometry( curve, 20, 10, 64, false );
                 tubegeometry.vertices = curve.getPoints( 50 );
 
-                var material = new THREE.MeshBasicMaterial( { color : 0xff0000 } );
+                var material = new THREE.MeshBasicMaterial( { color : 0xff0000, side:"THREE.BackSide" } );
 
                 // Create the final object to add to the scene
                 var mesh = new Physijs.ConvexMesh( tubegeometry, material, 0 );
