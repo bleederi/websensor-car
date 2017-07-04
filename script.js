@@ -555,7 +555,7 @@ customElements.define("game-view", class extends HTMLElement {
                 //y = canvas.height - ballRadius;       //2D
                 x = 0;
                 y = 0;
-                if(!nosensors)
+                /*if(!nosensors)
                 {
                         ut = setInterval(updateText, 1000);
                         mv = setInterval(update, 100);
@@ -565,7 +565,7 @@ customElements.define("game-view", class extends HTMLElement {
                         mv = setInterval(updateNS, 100);
                         window.addEventListener("keydown", keypress_handler, false);
                         window.addEventListener("keyup", keyup_handler, false);
-                }
+                }*/
                 //Update the road
                 //var rb = setInterval(buildRoad2D, 1000/speed);  //2D
                 this.buildRoad();
