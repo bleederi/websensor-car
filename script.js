@@ -581,9 +581,7 @@ customElements.define("game-view", class extends HTMLElement {
                 if(offroad)
                 {
                         console.log("Offroad");
-                        var score = timer;
-                        //Stop game loop
-                        clearInterval(loopvar);            
+                        this.gameOver();         
                 }                
                 if(collision)
                 {
@@ -616,6 +614,13 @@ customElements.define("game-view", class extends HTMLElement {
                 // Render loop
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
+        }
+        
+        gameOver() {
+                var score = timer;
+                //Stop game loop
+                clearInterval(loopvar);
+                clearInterval(timer);
         }
 
         buildRoad() {
