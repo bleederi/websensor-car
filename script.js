@@ -721,6 +721,19 @@ customElements.define("game-view", class extends HTMLElement {
                         //road.merge(segment);
 		        scene.add( segment );
                 }
+                var curve = new THREE.CubicBezierCurve3(
+	                new THREE.Vector3( -10, 0, 0 ),
+	                new THREE.Vector3( -5, 15, 0 ),
+	                new THREE.Vector3( 20, 15, 0 ),
+	                new THREE.Vector3( 10, 0, 0 )
+                );
+                var geometry = new THREE.Geometry();
+                geometry.vertices = curve.getPoints( 50 );
+
+                var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+
+                // Create the final object to add to the scene
+                var curveObject = new THREE.Line( geometry, material );
                 //scene.add(road);
         }
         createCar() {
