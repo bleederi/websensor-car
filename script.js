@@ -691,12 +691,12 @@ customElements.define("game-view", class extends HTMLElement {
         }
         drawRoad() {    //Draws the road on the screen
                 var geometry = new THREE.BoxGeometry( roadWidth, 2, segmentLength );
-var material = Physijs.createMaterial(
+var materialRoad = Physijs.createMaterial(
     new THREE.MeshBasicMaterial({ color: "grey" }),
     friction,
     restitution
 );
-                var road = new Physijs.BoxMesh(geometry, material, 0);
+                var road = new Physijs.BoxMesh(geometry, materialRoad, 0);
                 //var road = new Physijs.BoxMesh();
                 for (let j=0; j<segments.length; j++)
                 {
@@ -721,9 +721,9 @@ var material = Physijs.createMaterial(
                         segmentMeshes.push(segment);
                         road.add(segment);
                         //road.merge(segment);
-		        //scene.add( segment );
+		        scene.add( segment );
                 }
-                scene.add(road);
+                //scene.add(road);
                 var curve1 = new THREE.CubicBezierCurve3(
 	                new THREE.Vector3( 0, 2, 0 ),
 	                new THREE.Vector3( 5, 2, -10 ),
