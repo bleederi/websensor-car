@@ -734,6 +734,7 @@ customElements.define("game-view", class extends HTMLElement {
 
                 // Create the final object to add to the scene
                 var curveObject = new THREE.Line( geometry, material );
+                scene.add(curveObject);
                 //scene.add(road);
         }
         createCar() {
