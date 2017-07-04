@@ -783,7 +783,8 @@ var material = Physijs.createMaterial(
                 {
                         var geometry = new THREE.BoxGeometry( 0.5, 1, 0.5 );
                         var material = new THREE.MeshBasicMaterial( { color: "blue"} );
-		        var obstacle = new THREE.Mesh( geometry, material );
+                        let obstacle = new Physijs.BoxMesh( geometry, material , 0);
+		        //var obstacle = new THREE.Mesh( geometry, material );
                         obstacle.position.z = segments[i].z;
                         obstacle.position.y = -0.5;
                         obstacle.position.x = segments[i].x - roadWidth/2 + roadWidth * Math.random();
