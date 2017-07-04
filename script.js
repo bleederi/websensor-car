@@ -728,13 +728,14 @@ customElements.define("game-view", class extends HTMLElement {
 	                new THREE.Vector3( 0, 2, -30 )
                 );
                 var geometry = new THREE.Geometry();
+var tubegeometry = new THREE.TubeBufferGeometry( curve, 20, 2, 8, false );
                 geometry.vertices = curve.getPoints( 50 );
 
-                var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+                var material = new THREE.MeshBasicMaterial( { color : 0xff0000 } );
 
                 // Create the final object to add to the scene
-                var curveObject = new THREE.Line( geometry, material );
-                scene.add(curveObject);
+                var mesh = new Physijs.ConvexMesh( tubegeometry, material );
+                scene.add(mesh);
                 //scene.add(road);
         }
         createCar() {
