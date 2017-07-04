@@ -586,7 +586,7 @@ customElements.define("game-view", class extends HTMLElement {
                 //check for collisions (maybe not every loop?)
                 //collision = checkCollision(carcube);
                 offroad = isOffRoad(carcube);
-                speed = 0.1 + carcube.position.z/1000;  //increase speed bit by bit
+                speed = 0.1 - carcube.position.z/1000;  //increase speed bit by bit
                 if(offroad)
                 {
                         console.log("Offroad");
