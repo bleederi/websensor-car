@@ -697,7 +697,7 @@ customElements.define("game-view", class extends HTMLElement {
     restitution
 );*/
                 //var road = new Physijs.BoxMesh(geometry, material, 0);
-                var road;
+                var road = new Physijs.BoxMesh();
                 for (let j=0; j<segments.length; j++)
                 {
                         //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
