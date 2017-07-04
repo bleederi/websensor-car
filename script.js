@@ -108,7 +108,7 @@ var cameraHeight = 1000;
 
 //Timer
 var time=0;
-var timerVar=setInterval(function(){time = time + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
+var timerVar = null;
 
 var gameview = null;
 
@@ -574,6 +574,7 @@ customElements.define("game-view", class extends HTMLElement {
                 this.createCar();
                 this.createObstacles();
                 this.render();
+                timerVar=setInterval(function(){time = time + 10;},10);  //timer in ms, lowest possible value is 10, accurate enough though
                 loopvar = setInterval(this.loop.bind(null, this.camera, this.carcube), step);
         }
         //Main loop
