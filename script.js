@@ -420,7 +420,7 @@ function update()       //Update vars, move the car accordingly
 {
         direction = getDirection(roll, pitch, yaw, mode);
         force = getForce(roll, pitch, yaw, mode);
-        move();
+        //move();
 }
 
 /*      Functions related to testing without sensors      */
@@ -558,7 +558,7 @@ customElements.define("game-view", class extends HTMLElement {
                 if(!nosensors)
                 {
                         //ut = setInterval(updateText, 1000);
-                        mv = setInterval(update, 100);
+                        //mv = setInterval(update, 100);
                 }
                 else
                 {
@@ -579,6 +579,7 @@ customElements.define("game-view", class extends HTMLElement {
         }
         //Main loop
         loop(camera, carcube) {
+                update();
                 scene.simulate();
                 //console.log("cc", carcube);
                 //cons**ole.log(findClosestSegment(carcube).segment);
