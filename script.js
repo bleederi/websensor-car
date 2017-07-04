@@ -728,8 +728,8 @@ customElements.define("game-view", class extends HTMLElement {
 	                new THREE.Vector3( 0, 2, -30 )
                 );
                 var geometry = new THREE.Geometry();
-var tubegeometry = new THREE.TubeBufferGeometry( curve, 20, 2, 8, false );
-                geometry.vertices = curve.getPoints( 50 );
+                var tubegeometry = new THREE.TubeBufferGeometry( curve, 20, 2, 8, false );
+                tubegeometry.vertices = curve.getPoints( 50 );
 
                 var material = new THREE.MeshBasicMaterial( { color : 0xff0000 } );
 
