@@ -225,11 +225,11 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
         {
                 if(pitch < 0)
                 {       
-                        force = -pitch/10;
+                        force = -pitch/5;
                 }
                 else
                 {
-                        force = pitch/10;
+                        force = pitch/5;
                 }
         }
         return force;
