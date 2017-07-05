@@ -39,16 +39,8 @@ var force_div = document.getElementById("force");
 var ut; //debug text update var
 var mv; //movement update var
 
-/* Below for 2D */
-//var canvas = document.getElementById("canvas");
-//resize canvas to fullscreen
-//canvas.width = window.innerWidth;
-//canvas.height = window.innerHeight;
-//var ctx = canvas.getContext("2d");
-
 var latitude = null;
 var longitude = null;
-const GRAVITY = 9.81;
 var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //device orientation
 var sensorfreq = 60;
 
@@ -67,10 +59,6 @@ var direction = null;
 var force = null;
 var collision = false;
 var offroad = false;
-
-var ballRadius = 5;
-var roadblockHeight = 100;
-var roadblockWidthInitial = 200;
 
 //Rendering vars (Three.JS)
 var scene = null;
@@ -235,17 +223,6 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
         return force;
 }
 
-function move2D() //Moves the car
-{
-        if(direction == "left")
-        {
-                x = x - force;
-        }
-        else if (direction == "right")
-        {
-                x = x + force;
-        }
-}
 
 function move(camera, car) //Moves the car(camera)
 {
@@ -280,123 +257,8 @@ function move(camera, car) //Moves the car(camera)
         }
 }
 
-function checkCollision(car) {      //Check if the car is colliding with any other object, return 1 if collision, 0 otherwise
-//TODO: Too slow, need to optimize
-        for (let i=0; i<segments.length; i++)   //road segments - is the car on the road?
-        {
-                
-        }
-        //Object collision
-        //Collision using raycasting - From https://stemkoski.github.io/Three.js/Collision-Detection.html
-        var originPoint = car.position.clone();
-	for (var vertexIndex = 0; vertexIndex < car.geometry.vertices.length; vertexIndex++)
-	{		
-		var localVertex = car.geometry.vertices[vertexIndex].clone();
-		var globalVertex = localVertex.applyMatrix4( car.matrix );
-		var directionVector = globalVertex.sub( car.position );
-		
-		var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-		var collisionResults = ray.intersectObjects( obstacles );
-		if ( ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )) 
-                        return 1;
-	}
-        /*
-        if(findClosestSegment(car).lowest > carWidth)
-        {
-                return 1;
-        }*/
-        //console.log("C check");
-}
-
-function drawCar2D() 
+function isOffRoad(car)      //Determines if the car is off the road or not by checking if the car has fallen enough far down
 {
-        ctx.beginPath();
-        ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
-}
-
-function buildRoad2D()    //Generates the road segments, updates them as needed by "moving" the road
-{
-        if(segments.length === 0)       //Generate the road segments
-        {
-                for(let i=0; i<roadLength2D; i++)
-                {
-                        if(i%rumbleLength === 0)
-                        {
-                            segments.push({"color":"black"});
-                        }
-                        else
-                        {
-                            segments.push({"color":"grey"});
-                        }        
-                }
-        }
-        else
-        {
-                segments.unshift(segments.pop());       //Shift the segments, updating the road
-        }
-}
-function drawRoad2D()     //Draw the road and the rumble strips
-{
-        //TODO: Draw a curvy, random road
-        //Draw a rumble - This is for 2D
-        for (let j=0; j<segments.length; j++)
-        {
-                let xc = (j/segments.length)*roadWidth2D;
-                ctx.beginPath();
-                ctx.rect(canvas.width/2-xc,j*segmentLength,2*xc,roadblockHeight);     //road
-                ctx.fillStyle = segments[j].color;               
-                ctx.fill();
-
-                ctx.beginPath();
-                ctx.rect(canvas.width/2+xc,j*segmentLength,xc/2,(xc/100)*roadblockHeight);       //right rumble strip
-                ctx.fillStyle = "red";        
-                ctx.fill();
-                
-                ctx.beginPath();
-                ctx.rect(canvas.width/2-xc,j*segmentLength,-xc/2,(xc/100)*roadblockHeight);       //right rumble strip
-                ctx.fillStyle = "red";               
-                ctx.fill();
-                ctx.closePath(); 
-        }
-}
-
-function isOffRoad(car)      //Determines if the car is off the road or not by checking the pixel the car is on
-{
-/*      2D
-        //TODO: Inspect pixels instead?
-        if(x > canvas.width/2 + roadWidth/2 || x < canvas.width/2-roadWidth/2)
-        {
-            return 1;   //off the road
-        }
-        else
-        {
-            return 0;   //on the road
-        }
-*/
-//If the car's x,z coordinates are within the plane defined by the closest segment, then on road. Else offroad.
-//TODO: FIX
-        let index = findClosestSegment(car).index;
-        let segmentMesh = segmentMeshes[index];
-        let lowest = null;
-        //console.log(segmentMesh);
-      /*          for (let i = 0; i < segmentMesh.geometry.vertices.length; i++)   //find closest vertex to the car
-                {
-                        let vertexPos = {"x":segmentMesh.geometry.vertices[i].x + segments[index].x, "y":segmentMesh.geometry.vertices[i].y + segments[index].y, "z":segmentMesh.geometry.vertices[i].z + segments[index].z};       //Add the absolute coords to the offsets
-                        let distance = Math.sqrt(Math.pow((car.position.x - vertexPos.x), 2) + Math.pow((car.position.y - vertexPos.y), 2) + Math.pow((car.position.z - vertexPos.z), 2));
-                        //console.log(distance);
-                        if(lowest === null)
-                        {
-                                lowest = distance;
-                        }                
-                        if (distance < lowest)
-                        {
-                                lowest = distance;
-                        }
-                //console.log(lowest);
-                }*/
         if(car.position.y < -2)
         {
                 return true;
@@ -405,8 +267,6 @@ function isOffRoad(car)      //Determines if the car is off the road or not by c
         {
                 return false;
         }
-
-        //if(Math.sqrt(Math.pow((segment.x - car.position.x), 2) + Math.pow((segment.x - car.position.x), 2))
 }
 
 function gameOver() {
@@ -440,41 +300,6 @@ function keypress_handler(event) {
         direction = "right";
     }
         force = 0.05;
-}
-
-function distanceFromAtoB(position1,x2,y2,z2) {  //get position distance from specified point
-    var distance = new THREE.Vector3();
-    var target = new THREE.Vector3(x2,y2,z2);
-    distance.subVectors(position1, target);
-    return distance.length();
-};
-
-function findClosestSegment(car) { //Find the segment closest to the car - for offroad checking
-        let result = {"lowest":null, "segment":null, "index":null} //Includes the segment and its distance to the car
-        let lowest = null;
-        let lowestsegment = null;
-        let index = null;
-        for(let i=0; i<segments.length; i++)
-        {
-                let distance = Math.sqrt(Math.pow(car.position.x - segments[i].x, 2) + Math.pow(car.position.z - segments[i].z, 2));   //Need to only check x position
-                //console.log(distance);
-                if(lowest === null)
-                {
-                        lowest = distance;
-                        index = i;
-                        lowestsegment = segments[i];
-                }                
-                if (distance < lowest)
-                {
-                        lowest = distance;
-                        index = i;
-                        lowestsegment = segments[i];
-                }
-        }
-        result.lowest = lowest;
-        result.segment = lowestsegment;
-        result.index = index;
-        return result;
 }
 
 
@@ -517,18 +342,6 @@ customElements.define("game-view", class extends HTMLElement {
         this.hud.style.position = "absolute";
         document.body.appendChild(this.hud);
 
-        //sphere = new THREE.SphereGeometry(100, 100, 40);
-        //sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
-
-        //videoTexture = new THREE.Texture(video);
-        //videoTexture.minFilter = THREE.LinearFilter;
-        //videoTexture.magFilter = THREE.LinearFilter;
-        //videoTexture.format = THREE.RGBFormat;
-
-        //sphereMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, overdraw: 0.5 } );
-        //sphereMesh = new THREE.Mesh(sphere, sphereMaterial);
-        //scene.add(sphereMesh);
-
         this.carcube = null;
         }
 
@@ -550,26 +363,13 @@ customElements.define("game-view", class extends HTMLElement {
                         console.log("Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags.");
                         this.innerHTML = "Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags";
                 }
-                //place car - 2D
-                //x = canvas.width/2;   //2D
-                //y = canvas.height - ballRadius;       //2D
-                x = 0;
-                y = 0;
-                if(!nosensors)
-                {
-                        //ut = setInterval(updateText, 1000);
-                        //mv = setInterval(update, 100);
-                }
-                else
+                if(nosensors)
                 {
                         mv = setInterval(updateNS, 100);
                         window.addEventListener("keydown", keypress_handler, false);
                         window.addEventListener("keyup", keyup_handler, false);
                 }
-                //Update the road
-                //var rb = setInterval(buildRoad2D, 1000/speed);  //2D
                 this.buildRoad();
-                //console.log(segments);
                 this.drawRoad();
                 this.createCar();
                 this.createObstacles();
@@ -581,11 +381,7 @@ customElements.define("game-view", class extends HTMLElement {
         loop(camera, carcube) {
                 update();
                 scene.simulate();
-                //console.log("cc", carcube);
-                //cons**ole.log(findClosestSegment(carcube).segment);
                 move(camera, carcube);
-                //check for collisions (maybe not every loop?)
-                //collision = checkCollision(carcube);
                 offroad = isOffRoad(carcube);
                 if(offroad)
                 {
@@ -593,31 +389,13 @@ customElements.define("game-view", class extends HTMLElement {
                         gameOver();         
                 }   
                 speed = 0.1 + Math.abs(carcube.position.z/5000);  //increase speed bit by bit             
-                /*if(collision)
-                {
-                        console.log("Collision");
-                }*/
-                //var or = isOffRoad(camera.position.x);
-                //console.log(or);
-                //camera.position.x = camera.position.x + 0.1;
-                //console.log("loop");
         }
 
         render() {
-                //ctx.clearRect(0, 0, canvas.width, canvas.height);     //2D
-                //console.log(segments);
-                //Need to draw road before the car               
-                //drawRoad2D();     //for 2D
-                //drawCar2D();  //2D
-                
-                //Rotate cube
-	        //cube.rotation.x += 0.1;
-	        //cube.rotation.y += 0.1;
 
         //Render HUD
-        //this.hud.innerHTML = time;
         this.hud.innerHTML = -Math.floor(this.carcube.position.z);
-        //For some reason need to always update the position to avoid the HUD disappearinga
+        //For some reason need to always update the position to avoid the HUD disappearing
         this.hud.style.left = gameview.offsetLeft + 20 + "px";
         this.hud.style.top = gameview.offsetTop + 60 + "px";
 
@@ -632,7 +410,6 @@ customElements.define("game-view", class extends HTMLElement {
                 for(let i=0; i<roadLength; i++)
                 {
                         let segment = {"z":null, "y":null, "color":null, "type":null};
-                        //TODO: Generate curves somehow
                         if(Math.random() > 0.1)      //add condition for curve here
                         {
                                 if(Math.random() > 0.5) //right curve
@@ -652,7 +429,6 @@ customElements.define("game-view", class extends HTMLElement {
                                 segment.type = "straight";
                         }
                         segment.z = -(segmentLength*i);
-                        //console.log(segment.z);
                         segment.y = -2;
                         segment.x = roadx;    
                         segments.push(segment);
@@ -669,9 +445,6 @@ customElements.define("game-view", class extends HTMLElement {
                                 segments[i].color = "grey";
                         }
                 }
-                //segments.sort((a,b) => parseInt(Math.abs(a.z))-parseInt(Math.abs(b.z)));  //sort the segments according to z coordinate
-                //console.log("sort");
-                //console.log(segments);
         }
 
         createCurve(segmentStart, roadx, direction) {         //Creates a curve and adds it to the road
@@ -681,22 +454,18 @@ customElements.define("game-view", class extends HTMLElement {
                         {
                                 let segment = {"z":null, "y":null, "color":null, "type":null};
                                 segment.type = "curve";
-                                //segment.color = "green";
                                 segment.z = -(segmentLength*(segmentStart+j));
                                 segment.y = -2;
                                 segment.x = roadx;
-                                //roadx = roadx = 1;
                                 segments.push(segment);
                         }
                         else
                         {
                                 let segment = {"z":null, "y":null, "color":null, "type":null};
                                 segment.type = "curve";
-                                //segment.color = "green";
                                 segment.z = -(segmentLength*(segmentStart+j));
                                 segment.y = -2;
                                 segment.x = roadx;
-                                //roadx = roadx = 1;
                                 segments.push(segment);
                         }
                 }
@@ -709,79 +478,26 @@ customElements.define("game-view", class extends HTMLElement {
                     restitution
                 );
                 var road = new Physijs.BoxMesh(geometry, materialRoad, 0);
-                //var road = new Physijs.BoxMesh();
                 for (let j=0; j<segments.length; j++)
                 {
-                        //let material = new THREE.MeshBasicMaterial( { color: segments[j].color} );
                         let texture = this.loader.load('road.png');     //should the callback be used here?
                         let material = new THREE.MeshBasicMaterial( { map: texture } );
-//var material = Physijs.createMaterial(new THREE.MeshBasicMaterial({ color: segments[j].color }), friction, restitution);
-        		//let segment = new THREE.Mesh( geometry, material );
                         let segment = new Physijs.BoxMesh( geometry, material , 0);
-                //segment.__dirtyPosition = true;
-                //segment.__dirtyRotation = true;
-                        //console.log(cube.position.z);                        
-                        //segment.position.z = segments[j].z;
-                        //console.log(segment.position.z);
-                        //segment.position.x = segments[j].x;
-                        //segment.position.y = segments[j].y;
                         segment.position.set(segments[j].x,segments[j].y,segments[j].z);
-                        //if(segment.bb === undefined)    //compute bounding boxes only once
-                        //{
                                 segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
-                        //}
                         segmentMeshes.push(segment);
                         road.add(segment);
-                        //road.merge(segment);
 		        scene.add( segment );
                 }
-                //scene.add(road);
-                var curve1 = new THREE.CubicBezierCurve3(
-	                new THREE.Vector3( 0, 2, 0 ),
-	                new THREE.Vector3( 5, 2, -10 ),
-	                new THREE.Vector3( -5, 2, -20 ),
-	                new THREE.Vector3( 0, 2, -30 )
-                );
-                var curve2 = new THREE.CubicBezierCurve3(
-	                new THREE.Vector3( 0, 2, -30 ),
-	                new THREE.Vector3( 5, 2, -40 ),
-	                new THREE.Vector3( -5, 2, -50 ),
-	                new THREE.Vector3( 0, 2, -60 )
-                );
-                var curvePath = new THREE.CurvePath();
-                curvePath.add(curve1);
-                curvePath.add(curve2);
-                var geometry = new THREE.Geometry();
-                var tubegeometry = new THREE.TubeBufferGeometry( curvePath, 20, 10, 64, false );
-                tubegeometry.vertices = curvePath.getPoints( 100 );
-
-                var material = new THREE.MeshBasicMaterial( { color : 0xff0000, side:"THREE.DoubleSide" } );
-
-                // Create the final object to add to the scene
-                //var mesh = new Physijs.ConvexMesh( tubegeometry, material, 0 );
-                //scene.add(mesh);
-                //scene.add(road);
         }
         createCar() {
                 var geometry = new THREE.BoxGeometry( carWidth, 1, 1 );
-                //var material = new THREE.MeshBasicMaterial( { color: "red"} );
-		//this.carcube = new THREE.Mesh( geometry, material );
                 var material = Physijs.createMaterial(
                     new THREE.MeshBasicMaterial({ color: "red" }),
                     friction,
                     restitution
                 );
-/*
-var material = Physijs.createMaterial(
-                    new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('road.png') }),
-                    friction,
-                    restitution
-                );*/
                 this.carcube = new Physijs.BoxMesh( geometry, material, mass );
-                //this.carcube.__dirtyPosition = true;
-                //this.carcube.__dirtyRotation = true;
-                //this.carcube.position.z = 0;
-                //this.carcube.position.y = 0;
                 this.carcube.position.set(0, 0, 0);
                 this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection                 
 	        scene.add( this.carcube );
@@ -806,8 +522,3 @@ var material = Physijs.createMaterial(
                 }
         }
 });
-
-function magnitude(vector)      //Calculate the magnitude of a vector
-{
-return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
-}
