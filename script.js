@@ -324,7 +324,7 @@ var backgroundMesh = new THREE.Mesh(
     new THREE.MeshBasicMaterial({
          map: bgtexture
     }));
-scene.background = new THREE.Color( 0xff0000 );
+scene.background = backgroundMesh;
 
         //HUD
         this.hud = document.createElement('div');
