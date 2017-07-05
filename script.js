@@ -791,7 +791,7 @@ var material = Physijs.createMaterial(
         }
 
         createObstacles() {     //Create obstacles that the player has to avoid crashing into
-                for (let i=0; i<segments.length; i++)   //Randomly add obstacles, at most one per segment
+                for (let i=1; i<segments.length; i++)   //Randomly add obstacles, at most one per segment
                 {
                         var geometry = new THREE.BoxGeometry( 0.5, 1, 0.5 );
                         var material = new THREE.MeshBasicMaterial( { color: "blue"} );
