@@ -301,8 +301,9 @@ customElements.define("game-view", class extends HTMLElement {
         super();
 
         //THREE.js render stuff
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer(antialias: false,alpha:true);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0);
         gameview = document.body.appendChild(this.renderer.domElement);
         
         scene = new Physijs.Scene();
