@@ -316,6 +316,16 @@ customElements.define("game-view", class extends HTMLElement {
 
         this.loader = new THREE.TextureLoader();
 
+// Load the background texture
+var texture = this.loader.load( 'textures/background.jpg' );               
+var backgroundMesh = new THREE.Mesh( 
+    new THREE.PlaneGeometry(2048, 2048,8,8),
+    new THREE.MeshBasicMaterial({
+         map: texture
+    }));
+backgroundMesh.material.depthTest = false;
+backgroundMesh.material.depthWrite = false;
+
         //HUD
         this.hud = document.createElement('div');
         this.hud.id = "hud";
