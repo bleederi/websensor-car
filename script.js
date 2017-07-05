@@ -81,9 +81,7 @@ var step          = 1/fps;                   // length of each frame in seconds
 var segments = [];      //List of the parts of the road (segments)
 var segmentLength = 10;    //Segment length in pixels
 var roadLength = 300;   //road length in segments
-//var roadLength2D = canvas.height/segmentLength;   //road length in segments - 2D
 var roadWidth = 5;    //Road width in pixels
-//var roadWidth2D = 0.3*canvas.width; //2D
 var rumbleLength = 3;   //Length of a "rumble"
 var curveLength = 5;    //How many segments a curve consists of
 var obstacles = [];     //Array of the obstacles
@@ -227,33 +225,21 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
 function move(camera, car) //Moves the car(camera)
 {
         if(car !== undefined) {
-                //car.__dirtyPosition = true;
-                //car.__dirtyRotation = true;
-                //console.log("cc2", car);
                 var velocity = new THREE.Vector3();
                 var forcev = new THREE.Vector3();
                 if(direction == "left")
                 {
-                        //car.position.x = car.position.x - force;
                         velocity = ({x: car.getLinearVelocity().x-2*force, y: car.getLinearVelocity().y, z: -speed*100});
                         forcev = {x: -forcefactor*mass*force, y: 0, z: -40*speed};
                 }
                 else if (direction == "right")
                 {
-                        //car.position.x = car.position.x + force;
                         velocity = ({x: car.getLinearVelocity().x+2*force, y: car.getLinearVelocity().y, z: -speed*100});
                         forcev = {x: forcefactor*mass*force, y: 0, z: -40*speed};
                 }
                 camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
-                //car.position.z = car.position.z - speed;
-                //car.rotation.set(0, 0, 0);
-
-                //console.log(velocity);
-                //car.velocity.z = speed;
                 car.setLinearVelocity(velocity);
-                //car.applyCentralForce(forcev);
-
         }
 }
 
@@ -280,7 +266,6 @@ function update()       //Update vars, move the car accordingly
 {
         direction = getDirection(roll, pitch, yaw, mode);
         force = getForce(roll, pitch, yaw, mode);
-        //move();
 }
 
 /*      Functions related to testing without sensors      */
@@ -320,7 +305,6 @@ customElements.define("game-view", class extends HTMLElement {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         gameview = document.body.appendChild(this.renderer.domElement);
         
-        //scene = new THREE.Scene();
         scene = new Physijs.Scene();
         scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
 
@@ -329,7 +313,6 @@ customElements.define("game-view", class extends HTMLElement {
 
 	this.camera.position.y = 1;
 	this.camera.position.z = 2;
-        //console.log(gameview.offsetTop, gameview.offsetLeft);
 
         this.loader = new THREE.TextureLoader();
 
@@ -512,7 +495,6 @@ customElements.define("game-view", class extends HTMLElement {
                         var geometry = new THREE.BoxGeometry( 0.5, 1, 0.5 );
                         var material = new THREE.MeshBasicMaterial( { color: "blue"} );
                         let obstacle = new Physijs.BoxMesh( geometry, material , 0);
-		        //var obstacle = new THREE.Mesh( geometry, material );
                         obstacle.position.z = segments[i].z;
                         obstacle.position.y = -0.5;
                         obstacle.position.x = segments[i].x - roadWidth/2 + roadWidth * Math.random();
