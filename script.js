@@ -301,9 +301,9 @@ customElements.define("game-view", class extends HTMLElement {
         super();
 
         //THREE.js render stuff
-        this.renderer = new THREE.WebGLRenderer(antialias: false,alpha:true);
+        this.renderer = new THREE.WebGLRenderer(alpha:true);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x000000, 0);
+        renderer.setClearColor(0xffffff, 0);
         gameview = document.body.appendChild(this.renderer.domElement);
         
         scene = new Physijs.Scene();
@@ -318,14 +318,13 @@ customElements.define("game-view", class extends HTMLElement {
         this.loader = new THREE.TextureLoader();
 
 // Load the background texture
-var texture = this.loader.load( 'background.jpg' );               
+var bgtexture = this.loader.load( 'background.jpg' );               
 var backgroundMesh = new THREE.Mesh( 
     new THREE.PlaneGeometry(2048, 2048,8,8),
     new THREE.MeshBasicMaterial({
-         map: texture
+         map: bgtexture
     }));
-backgroundMesh.material.depthTest = false;
-backgroundMesh.material.depthWrite = false;
+scene.background = new THREE.Color( 0xff0000 );
 
         //HUD
         this.hud = document.createElement('div');
