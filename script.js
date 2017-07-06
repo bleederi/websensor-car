@@ -239,8 +239,6 @@ function move(camera, car) //Moves the car(camera)
                 }
                 camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
-                //move skybox with the camera
-                skyBox.position.z = camera.position.z;
                 car.setLinearVelocity(velocity);
         }
 }
