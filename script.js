@@ -230,8 +230,11 @@ function gameOver() {
 
 function update()       //Update direction and force
 {
-        direction = getDirection(roll, pitch, yaw, mode);
-        force = getForce(roll, pitch, yaw, mode);
+        if(nosensors)
+        {
+                direction = getDirection(roll, pitch, yaw, mode);
+                force = getForce(roll, pitch, yaw, mode);
+        }
 }
 
 /*      Functions related to testing without sensors      */
@@ -250,13 +253,7 @@ function keypress_handler(event) {
     if (event.keyCode == 68) {
         direction = "right";
     }
-        force = 0.2;
-}
-
-
-function updateNS()       //Update vars, move the car accordingly (no sensors)
-{
-                move();
+        force = 1;
 }
 
 
@@ -333,7 +330,6 @@ customElements.define("game-view", class extends HTMLElement {
                 }
                 if(nosensors)
                 {
-                        mv = setInterval(updateNS, 100);
                         window.addEventListener("keydown", keypress_handler, false);
                         window.addEventListener("keyup", keyup_handler, false);
                 }
