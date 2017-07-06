@@ -319,7 +319,6 @@ customElements.define("game-view", class extends HTMLElement {
         //skybox
         this.cameraCube = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
         var sceneCube = new Physijs.Scene();
-        sceneCube.add( skyBox );
 	var imgFolder = "bg/";
 	var directions  = ["left", "right", "top", "bot", "back", "front"];
 	var imageSuffix = ".png";
@@ -333,7 +332,8 @@ customElements.define("game-view", class extends HTMLElement {
 		}));
 	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
 	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-	scene.add( skyBox );
+        sceneCube.add( skyBox );
+	//scene.add( skyBox );
         //renderer.autoClear = false;
 
         //HUD
