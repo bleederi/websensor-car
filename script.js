@@ -235,7 +235,7 @@ function gameOver() {
         clearInterval(timerVar);
 }
 
-function update()       //Update vars, move the car accordingly
+function update()       //Update direction and force
 {
         direction = getDirection(roll, pitch, yaw, mode);
         force = getForce(roll, pitch, yaw, mode);
@@ -337,6 +337,7 @@ customElements.define("game-view", class extends HTMLElement {
                         console.log(err.message);
                         console.log("Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags.");
                         this.innerHTML = "Your browser doesn't seem to support generic sensors. If you are running Chrome, please enable it in about:flags";
+                        nosensors = true;
                 }
                 if(nosensors)
                 {
