@@ -254,7 +254,7 @@ function keypress_handler(event) {
     if (event.keyCode == 68) {
         direction = "right";
     }
-        force = 1;
+        force = 0.2;
 }
 
 
