@@ -193,7 +193,6 @@ function move(camera, car) //Moves the car(camera)
         if(car !== undefined) {
                 var velocity = new THREE.Vector3();
                 var forcev = new THREE.Vector3();
-                console.log(force);
                 if(direction == "left")
                 {
                         velocity = ({x: car.getLinearVelocity().x-2*force, y: car.getLinearVelocity().y, z: -speed*100});
