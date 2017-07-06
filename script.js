@@ -334,7 +334,7 @@ customElements.define("game-view", class extends HTMLElement {
 	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
 	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
 	scene.add( skyBox );
-        renderer.autoClear = false;
+        //renderer.autoClear = false;
 
         //HUD
         this.hud = document.createElement('div');
@@ -404,7 +404,7 @@ customElements.define("game-view", class extends HTMLElement {
 
                 this.camera.lookAt(this.carcube.position);
                 // Render loop
-                this.renderer.render( sceneCube, cameraCube );  //skybox
+                //this.renderer.render( sceneCube, cameraCube );  //skybox
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
         }
