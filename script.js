@@ -58,7 +58,7 @@ var offroad = false;
 
 //Rendering vars (Three.JS)
 var scene = null;
-var sceneCube = null;   //separate scene for the skybox
+var sceneSky = null;   //separate scene for the skybox
 
 var x = 0;      //car x coordinate
 var y = 0;      //car y coordinate
@@ -283,8 +283,8 @@ customElements.define("game-view", class extends HTMLElement {
         this.loader = new THREE.TextureLoader();
 	
         //skybox
-        this.cameraCube = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-        sceneCube = new Physijs.Scene();
+        this.cameraSky = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+        sceneSky = new Physijs.Scene();
 	var imgFolder = "bg/";
 	var directions  = ["left", "right", "top", "bot", "back", "front"];
 	var imageSuffix = ".png";
@@ -298,7 +298,7 @@ customElements.define("game-view", class extends HTMLElement {
 		}));
 	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
 	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-        sceneCube.add( skyBox );
+        sceneSky.add( skyBox );
         this.renderer.autoClear = false;
 
         //HUD
@@ -369,7 +369,7 @@ customElements.define("game-view", class extends HTMLElement {
 
                 this.camera.lookAt(this.carcube.position);
                 // Render loop
-                this.renderer.render( sceneCube, this.cameraCube );  //skybox
+                this.renderer.render( sceneSky, this.cameraSky );  //skybox
                 this.renderer.render(scene, this.camera);
                 requestAnimationFrame(() => this.render());
         }
