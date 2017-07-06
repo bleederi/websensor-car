@@ -181,15 +181,8 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
                 direction = "todo";
         }
         else
-        {
-                if(pitch < 0)
-                {       
-                        force = -pitch/5;
-                }
-                else
-                {
-                        force = pitch/5;
-                }
+        {      
+                force = Math.abs(pitch/5);
         }
         return force;
 }
@@ -257,13 +250,12 @@ function keypress_handler(event) {
     if (event.keyCode == 68) {
         direction = "right";
     }
-        force = 0.05;
+        force = 0.2;
 }
 
 
 function updateNS()       //Update vars, move the car accordingly (no sensors)
 {
-                force = 0.05;
                 move();
 }
 
