@@ -239,6 +239,8 @@ function move(camera, car) //Moves the car(camera)
                 }
                 camera.position.x = car.position.x;
                 camera.position.z = car.position.z + 5;
+                //move skybox with the camera
+                skybox.position.z = camera.position.z;
                 car.setLinearVelocity(velocity);
         }
 }
@@ -308,7 +310,7 @@ customElements.define("game-view", class extends HTMLElement {
         scene = new Physijs.Scene();
         scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
 
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2000);
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500);
         this.camera.target = new THREE.Vector3(0, 0, 0);
 
 	this.camera.position.y = 1;
@@ -320,7 +322,7 @@ customElements.define("game-view", class extends HTMLElement {
 	var imgFolder = "bg/";
 	var directions  = ["front", "back", "top", "bot", "left", "right"];
 	var imageSuffix = ".png";
-	var skyGeometry = new THREE.CubeGeometry( 1000, 1000, 1000 );	
+	var skyGeometry = new THREE.CubeGeometry( 300, 300, 300 );	
 	
 	var materialArray = [];
 	for (var i = 0; i < 6; i++)
