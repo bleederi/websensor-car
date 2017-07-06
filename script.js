@@ -320,7 +320,7 @@ customElements.define("game-view", class extends HTMLElement {
 	
         //skybox
 	var imgFolder = "bg/";
-	var directions  = ["front", "back", "top", "bot", "left", "right"];
+	var directions  = ["left", "right", "top", "bot", "back", "front"];
 	var imageSuffix = ".png";
 	var skyGeometry = new THREE.CubeGeometry( 300, 300, 300 );	
 	
