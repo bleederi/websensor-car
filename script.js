@@ -231,7 +231,7 @@ function gameOver() {
 
 function update()       //Update direction and force
 {
-        if(nosensors)
+        if(!nosensors)
         {
                 direction = getDirection(roll, pitch, yaw, mode);
                 force = getForce(roll, pitch, yaw, mode);
