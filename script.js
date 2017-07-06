@@ -301,9 +301,8 @@ customElements.define("game-view", class extends HTMLElement {
         super();
 
         //THREE.js render stuff
-        this.renderer = new THREE.WebGLRenderer({alpha:true});
+        this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setClearColor(0xffffff, 0);
         gameview = document.body.appendChild(this.renderer.domElement);
         
         scene = new Physijs.Scene();
@@ -316,15 +315,21 @@ customElements.define("game-view", class extends HTMLElement {
 	this.camera.position.z = 2;
 
         this.loader = new THREE.TextureLoader();
-
-// Load the background texture
-var bgtexture = this.loader.load( 'background.jpg' );               
-var backgroundMesh = new THREE.Mesh( 
-    new THREE.PlaneGeometry(2048, 2048,8,8),
-    new THREE.MeshBasicMaterial({
-         map: bgtexture
-    }));
-scene.background = backgroundMesh;
+	
+	var imgFolder = "bg/";
+	var directions  = ["front", "back", "top", "bot", "left", "right"];
+	var imageSuffix = ".png";
+	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );	
+	
+	var materialArray = [];
+	for (var i = 0; i < 6; i++)
+		materialArray.push( new THREE.MeshBasicMaterial({
+			map: THREE.ImageUtils.loadTexture( imgFolder + directions[i] + imageSuffix ),
+			side: THREE.BackSide
+		}));
+	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+	scene.add( skyBox );
 
         //HUD
         this.hud = document.createElement('div');
