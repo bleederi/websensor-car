@@ -334,7 +334,7 @@ customElements.define("game-view", class extends HTMLElement {
 	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
         sceneCube.add( skyBox );
 	//scene.add( skyBox );
-        renderer.autoClear = false;
+        this.renderer.autoClear = false;
 
         //HUD
         this.hud = document.createElement('div');
