@@ -39,9 +39,6 @@ var force_div = document.getElementById("force");
 var ut; //debug text update var
 var mv; //movement update var
 
-var latitude = null;
-var longitude = null;
-var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //device orientation
 var sensorfreq = 60;
 
 var orientation_sensor = null;
@@ -57,26 +54,15 @@ var yaw = null;
 
 var direction = null;
 var force = null;
-var collision = false;
 var offroad = false;
 
 //Rendering vars (Three.JS)
 var scene = null;
-var sphere = null;
-var video = null;
-var videoF = null;
-var videoB = null;
-var videoTexture = null;
-var sphereMaterial = null;
-var sphereMesh = null;
-
-var sceneCube = null;
+var sceneCube = null;   //separate scene for the skybox
 
 var x = 0;      //car x coordinate
 var y = 0;      //car y coordinate
 var speed = 0.1;        //0.1 for threeJS, 10 for Physijs
-var angle = 0;
-var mod = 0;
 
 var fps           = 60;
 var step          = 1/fps;                   // length of each frame in seconds
@@ -88,11 +74,7 @@ var rumbleLength = 3;   //Length of a "rumble"
 var curveLength = 5;    //How many segments a curve consists of
 var obstacles = [];     //Array of the obstacles
 var segmentMeshes = [];   //Array of the segment meshes
-var road = null;  //Segments merged into one
 var carWidth = 1;
-
-//Camera vars
-var cameraHeight = 1000;
 
 //Timer
 var time=0;
@@ -128,17 +110,6 @@ class AbsOriSensor {
         };
         const start = () => sensor.start();
         Object.assign(this, { start });
-        }
-}
-class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
-  constructor(reading, bias) {
-    Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
-    this.bias = bias;
-  }
-        update(reading) {
-                this.x = this.x * this.bias + reading.x * (1 - this.bias);
-                this.y = this.y * this.bias + reading.y * (1 - this.bias);
-                this.z = this.z * this.bias + reading.z * (1 - this.bias);
         }
 }
 
@@ -293,7 +264,7 @@ function keypress_handler(event) {
 function updateNS()       //Update vars, move the car accordingly (no sensors)
 {
                 force = 0.05;
-                move2D();
+                move();
 }
 
 
@@ -335,7 +306,6 @@ customElements.define("game-view", class extends HTMLElement {
 	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
 	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
         sceneCube.add( skyBox );
-	//scene.add( skyBox );
         this.renderer.autoClear = false;
 
         //HUD
