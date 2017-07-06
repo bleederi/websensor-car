@@ -246,7 +246,6 @@ function keyup_handler(event) {
 }
 
 function keypress_handler(event) {
-    console.log(event.keyCode);
     if (event.keyCode == 65) {  //A
         direction = "left";
     }
