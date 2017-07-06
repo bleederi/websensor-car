@@ -70,6 +70,8 @@ var videoTexture = null;
 var sphereMaterial = null;
 var sphereMesh = null;
 
+var sceneCube = null;
+
 var x = 0;      //car x coordinate
 var y = 0;      //car y coordinate
 var speed = 0.1;        //0.1 for threeJS, 10 for Physijs
@@ -318,7 +320,7 @@ customElements.define("game-view", class extends HTMLElement {
 	
         //skybox
         this.cameraCube = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-        var sceneCube = new Physijs.Scene();
+        sceneCube = new Physijs.Scene();
 	var imgFolder = "bg/";
 	var directions  = ["left", "right", "top", "bot", "back", "front"];
 	var imageSuffix = ".png";
