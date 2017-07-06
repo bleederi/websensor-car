@@ -310,7 +310,7 @@ customElements.define("game-view", class extends HTMLElement {
         scene = new Physijs.Scene();
         scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
 
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500);
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 200);
         this.camera.target = new THREE.Vector3(0, 0, 0);
 
 	this.camera.position.y = 1;
@@ -324,7 +324,7 @@ customElements.define("game-view", class extends HTMLElement {
 	var imgFolder = "bg/";
 	var directions  = ["left", "right", "top", "bot", "back", "front"];
 	var imageSuffix = ".png";
-	var skyGeometry = new THREE.CubeGeometry( 300, 300, 300 );	
+	var skyGeometry = new THREE.CubeGeometry( 1000, 1000, 1000 );	
 	
 	var materialArray = [];
 	for (var i = 0; i < 6; i++)
