@@ -46,7 +46,7 @@ var orientation_sensor = null;
 var loopvar = null;
 
 var mode = "portrait";
-var nosensors = 0;      //Flag for testing without sensors
+var nosensors = false;      //Flag for testing without sensors
 
 var roll = null;
 var pitch = null;
@@ -81,6 +81,8 @@ var time=0;
 var timerVar = null;
 
 var gameview = null;
+
+var urlParams = null;
 
 //PhysiJS vars
 var friction = 0.3;
@@ -314,6 +316,8 @@ customElements.define("game-view", class extends HTMLElement {
         }
 
         connectedCallback() {
+        urlParams = new URLSearchParams(window.location.search);
+        nosensors = urlParams.has('nosensors'); //to specify whether or not to use sensors in the URL
                 try {
                 //Initialize sensors
                 orientation_sensor = new AbsOriSensor();
