@@ -82,7 +82,7 @@ var timerVar = null;
 
 var gameview = null;
 
-var urlParams = null;
+//var urlParams = null;
 
 //PhysiJS vars
 var friction = 0.3;
@@ -99,13 +99,14 @@ class AbsOriSensor {
         const sensor = new AbsoluteOrientationSensor({ frequency: sensorfreq });
         const mat4 = new Float32Array(16);
         const euler = new Float32Array(3);
-        sensor.onchange = () => {
+        sensor.onreading = () => {
                 sensor.populateMatrix(mat4);
                 toEulerianAngle(sensor.quaternion, euler);      //From quaternion to Eulerian angles
                 this.roll = euler[0];
                 this.pitch = euler[1];
                 this.yaw = euler[2];
-                if (this.onchange) this.onchange();
+                console.log(this.roll, this.pitch, this.yaw);
+                if (this.onreading) this.onreading();
         };
         sensor.onactivate = () => {
                 if (this.onactivate) this.onactivate();
@@ -316,15 +317,16 @@ customElements.define("game-view", class extends HTMLElement {
         }
 
         connectedCallback() {
-        urlParams = new URLSearchParams(window.location.search);
-        nosensors = urlParams.has('nosensors'); //to specify whether or not to use sensors in the URL
+        //urlParams = new URLSearchParams(window.location.search);
+        //nosensors = urlParams.has('nosensors'); //to specify whether or not to use sensors in the URL
                 try {
                 //Initialize sensors
                 orientation_sensor = new AbsOriSensor();
-                orientation_sensor.onchange = () => {
+                orientation_sensor.onreading = () => {
                         roll = orientation_sensor.roll;
                         pitch = orientation_sensor.pitch;
                         yaw = orientation_sensor.yaw;
+                        console.log(roll, pitch, yaw);
                 };
                 orientation_sensor.onactivate = () => {
                 };
@@ -351,6 +353,7 @@ customElements.define("game-view", class extends HTMLElement {
         }
         //Main loop
         loop(camera, carcube) {
+                //console.log(roll, pitch, yaw);
                 update();
                 scene.simulate();
                 move(camera, carcube);
