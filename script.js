@@ -105,7 +105,6 @@ class AbsOriSensor {
                 this.roll = euler[0];
                 this.pitch = euler[1];
                 this.yaw = euler[2];
-                console.log(this.roll, this.pitch, this.yaw);
                 if (this.onreading) this.onreading();
         };
         sensor.onactivate = () => {
@@ -326,7 +325,6 @@ customElements.define("game-view", class extends HTMLElement {
                         roll = orientation_sensor.roll;
                         pitch = orientation_sensor.pitch;
                         yaw = orientation_sensor.yaw;
-                        console.log(roll, pitch, yaw);
                 };
                 orientation_sensor.onactivate = () => {
                 };
@@ -353,7 +351,6 @@ customElements.define("game-view", class extends HTMLElement {
         }
         //Main loop
         loop(camera, carcube) {
-                //console.log(roll, pitch, yaw);
                 update();
                 scene.simulate();
                 move(camera, carcube);
