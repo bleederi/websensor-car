@@ -293,11 +293,11 @@ customElements.define("game-view", class extends HTMLElement {
 	var materialArray = [];
 	for (var i = 0; i < 6; i++)
 		materialArray.push( new THREE.MeshBasicMaterial({
-			map: THREE.ImageUtils.loadTexture( imgFolder + directions[i] + imageSuffix ),
+			map: this.loader.load( imgFolder + directions[i] + imageSuffix ),
 			side: THREE.BackSide
 		}));
-	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+	//var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+	var skyBox = new THREE.Mesh( skyGeometry, materialArray );
         sceneSky.add( skyBox );
         this.renderer.autoClear = false;
 
