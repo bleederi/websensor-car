@@ -320,7 +320,7 @@ customElements.define("game-view", class extends HTMLElement {
         //nosensors = urlParams.has('nosensors'); //to specify whether or not to use sensors in the URL
                 try {
                 //Initialize sensors
-                orientation_sensor = new AbsOriSensor();
+                orientation_sensor = new AbsOriSensor();        //TODO: use relative orientation sensor
                 orientation_sensor.onreading = () => {
                         roll = orientation_sensor.roll;
                         pitch = orientation_sensor.pitch;
@@ -407,7 +407,8 @@ customElements.define("game-view", class extends HTMLElement {
                         segments.push(segment);
                 }
                 //color the segments
-                for(let i=0; i<segments.length; i++)
+                let segmentsLength = segments.length;
+                for(let i=0; i<segmentsLength; i++)
                 {
                         if(i%rumbleLength === 0)
                         {
@@ -451,7 +452,8 @@ customElements.define("game-view", class extends HTMLElement {
                     restitution
                 );
                 var road = new Physijs.BoxMesh(geometry, materialRoad, 0);
-                for (let j=0; j<segments.length; j++)
+                let segmentsLength = segments.length;
+                for (let j=0; j<segmentsLength; j++)
                 {
                         let texture = this.loader.load('road.png');     //should the callback be used here?
                         let material = new THREE.MeshBasicMaterial( { map: texture } );
@@ -480,7 +482,8 @@ customElements.define("game-view", class extends HTMLElement {
         }
 
         createObstacles() {     //Create obstacles that the player has to avoid crashing into
-                for (let i=1; i<segments.length; i++)   //Randomly add obstacles, at most one per segment
+                let segmentsLength = segments.length;
+                for (let i=1; i<segmentsLength; i++)   //Randomly add obstacles, at most one per segment
                 {
                         var geometry = new THREE.BoxGeometry( 0.5, 1, 0.5 );
                         var material = new THREE.MeshBasicMaterial( { color: "blue"} );
