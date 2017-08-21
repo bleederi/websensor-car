@@ -173,8 +173,9 @@ function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direc
         }
         else
         {
-                if(screen.orientation.angle === 0)      //Portrait mode
-                {
+        switch(screen.orientation.angle) {
+                default:
+                case 0:
                         if(pitch < 0)
                         {       
                                 direction = "left";
@@ -183,9 +184,8 @@ function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direc
                         {
                                 direction = "right";
                         }
-                }
-                if(screen.orientation.angle === 90)      //Landscape mode
-                {
+                break;
+                case 90:      //Landscape mode
                         if(roll < 0)
                         {       
                                 direction = "left";
@@ -194,6 +194,17 @@ function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direc
                         {
                                 direction = "right";
                         }
+                break;
+                case 270:      //Landscape mode
+                        if(roll < 0)
+                        {       
+                                direction = "left";
+                        }
+                        else
+                        {
+                                direction = "right";
+                        }
+                break;
                 }
         }
         return direction;
@@ -207,14 +218,17 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
         }
         else
         {    
-                if(screen.orientation.angle === 0)      //Portrait mode
-                {  
+        switch(screen.orientation.angle) {
+                default:
+                case 0:
                         force = Math.abs(pitch/5);
-                }
-                else if(screen.orientation.angle === 90)      //Portrait mode
-                {
+                break;
+                case 90:
                         force = Math.abs(roll/5);
-                }
+                break;
+                case 270:
+                        force = Math.abs(roll/5);
+                break;
         }
         return force;
 }
