@@ -178,12 +178,12 @@ function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direc
                 case 0:
                         pitch < 0 ? direction = "left" : direction = "right";
                 break;
-                case 90:
+                /*case 90:
                         roll < 0 ? direction = "left" : direction = "right";
                 break;
                 case 270:
                         roll < 0 ? direction = "left" : direction = "right";
-                break;
+                break;*/
                 }
         }
         return direction;
@@ -202,12 +202,12 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
                         case 0:
                                 force = Math.abs(pitch/5);
                         break;
-                        case 90:
+                        /*case 90:
                                 force = Math.abs(roll/5);
                         break;
                         case 270:
                                 force = Math.abs(roll/5);
-                        break;
+                        break;*/
                 }
         }
         return force;
