@@ -173,13 +173,27 @@ function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direc
         }
         else
         {
-                if(pitch < 0)
-                {       
-                        direction = "left";
-                }
-                else
+                if(screen.orientation.angle === 0)      //Portrait mode
                 {
-                        direction = "right";
+                        if(pitch < 0)
+                        {       
+                                direction = "left";
+                        }
+                        else
+                        {
+                                direction = "right";
+                        }
+                }
+                if(screen.orientation.angle === 90)      //Landscape mode
+                {
+                        if(roll < 0)
+                        {       
+                                direction = "left";
+                        }
+                        else
+                        {
+                                direction = "right";
+                        }
                 }
         }
         return direction;
@@ -192,8 +206,15 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
                 direction = "todo";
         }
         else
-        {      
-                force = Math.abs(pitch/5);
+        {    
+                if(screen.orientation.angle === 0)      //Portrait mode
+                {  
+                        force = Math.abs(pitch/5);
+                }
+                else if(screen.orientation.angle === 90)      //Portrait mode
+                {
+                        force = Math.abs(roll/5);
+                }
         }
         return force;
 }
