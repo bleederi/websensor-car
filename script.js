@@ -276,7 +276,7 @@ customElements.define("game-view", class extends HTMLElement {
         scene = new Physijs.Scene();
         scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
 
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 200);
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 100);
         this.camera.target = new THREE.Vector3(0, 0, 0);
 
 	this.camera.position.y = 1;
@@ -485,7 +485,7 @@ customElements.define("game-view", class extends HTMLElement {
                 let segmentsLength = segments.length;
                 for (let i=1; i<segmentsLength; i++)   //Randomly add obstacles, at most one per segment
                 {
-                        var geometry = new THREE.SphereGeometry( 1, 8, 6 );
+                        var geometry = new THREE.SphereGeometry( 1, 6, 4 );
                         var material = new THREE.MeshBasicMaterial( { color: "blue"} );
                         let obstacle = new Physijs.SphereMesh( geometry, material , 0);
                         obstacle.position.z = segments[i].z;
