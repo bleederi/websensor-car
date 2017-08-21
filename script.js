@@ -487,7 +487,7 @@ customElements.define("game-view", class extends HTMLElement {
                 {
                         var geometry = new THREE.SphereGeometry( 1, 6, 4 );
                         let texture = this.loader.load('road.png');     //should the callback be used here?
-                        let material = new THREE.MeshBasicMaterial( { map: texture } );s
+                        let material = new THREE.MeshBasicMaterial( { map: texture } );
                         let obstacle = new Physijs.SphereMesh( geometry, material , 0);
                         obstacle.position.z = segments[i].z;
                         obstacle.position.y = -1;
