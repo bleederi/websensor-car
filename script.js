@@ -341,8 +341,10 @@ customElements.define("game-view", class extends HTMLElement {
         window.addEventListener( 'resize', onWindowResize, false );     //On window resize, also resize canvas so it fills the screen
 
         function onWindowResize() {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
+                this.camera.aspect = window.innerWidth / window.innerHeight;
+                this.camera.updateProjectionMatrix();
+                this.cameraSky.aspect = window.innerWidth / window.innerHeight;
+                this.cameraSky.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
