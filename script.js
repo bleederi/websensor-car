@@ -486,7 +486,8 @@ customElements.define("game-view", class extends HTMLElement {
                 for (let i=1; i<segmentsLength; i++)   //Randomly add obstacles, at most one per segment
                 {
                         var geometry = new THREE.SphereGeometry( 1, 6, 4 );
-                        var material = new THREE.MeshBasicMaterial( { color: "blue"} );
+                        let texture = this.loader.load('road.png');     //should the callback be used here?
+                        let material = new THREE.MeshBasicMaterial( { map: texture } );s
                         let obstacle = new Physijs.SphereMesh( geometry, material , 0);
                         obstacle.position.z = segments[i].z;
                         obstacle.position.y = -1;
