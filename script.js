@@ -94,48 +94,57 @@ Physijs.scripts.worker = '/websensor-car/js/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
 
 //Sensor classes and low-pass filter
-class AbsOriSensor {
+//This is a sensor that uses RelativeOrientationSensor and converts the quaternion to Euler angles
+class OriSensor {
         constructor() {
-        const sensor = new AbsoluteOrientationSensor({ frequency: sensorfreq });
-        const mat4 = new Float32Array(16);
-        const euler = new Float32Array(3);
-        sensor.onreading = () => {
-                sensor.populateMatrix(mat4);
-                toEulerianAngle(sensor.quaternion, euler);      //From quaternion to Eulerian angles
-                this.roll = euler[0];
-                this.pitch = euler[1];
-                this.yaw = euler[2];
-                if (this.onreading) this.onreading();
+        this.sensor_ = new RelativeOrientationSensor({ frequency: sensorfreq });
+        this.x_ = 0;
+        this.y_ = 0;
+        this.z_ = 0;
+        this.sensor_.onreading = () => {
+                let quat = this.sensor_.quaternion;
+                let quaternion = new THREE.Quaternion();        //Conversion to Euler angles done in THREE.js so we have to create a THREE.js object for holding the quaternion to convert from
+                let euler = new THREE.Euler( 0, 0, 0);  //Will hold the Euler angles corresponding to the quaternion
+                quaternion.set(quat[0], quat[1], quat[2], quat[3]);     //x,y,z,w
+                //Coordinate system must be adapted depending on orientation
+                if(screen.orientation.angle === 0)      //portrait mode
+                {
+                euler.setFromQuaternion(quaternion, 'ZYX');     //ZYX works in portrait, ZXY in landscape
+                }
+                else if(screen.orientation.angle === 90 || screen.orientation.angle === 180 || screen.orientation.angle === 270)        //landscape mode
+                {
+                euler.setFromQuaternion(quaternion, 'ZXY');     //ZYX works in portrait, ZXY in landscape
+                }
+                this.x_ = euler.x;
+                this.y_ = euler.y;
+                this.z_ = euler.z;
+                if (this.onreading_) this.onreading_();
         };
-        sensor.onactivate = () => {
-                if (this.onactivate) this.onactivate();
-        };
-        const start = () => sensor.start();
-        Object.assign(this, { start });
+        }
+        start() { this.sensor_.start(); }
+        stop() { this.sensor_.stop(); }
+        get x() {
+                return this.x_;
+        }
+        get y() {
+                return this.y_;
+        } 
+        get z() {
+                return this.z_;
+        }
+        get longitudeInitial() {
+                return this.longitudeInitial_;
+        }
+        set onactivate(func) {
+                this.sensor_.onactivate_ = func;
+        }
+        set onerror(err) {
+                this.sensor_.onerror_ = err;
+        }
+        set onreading (func) {
+                this.onreading_ = func;  
         }
 }
-
-//WINDOWS 10 HAS DIFFERENT CONVENTION: Yaw z, pitch x, roll y
-function toEulerianAngle(quat, out)
-{
-        const ysqr = quat[1] ** 2;
-
-        // Roll (x-axis rotation).
-        const t0 = 2 * (quat[3] * quat[0] + quat[1] * quat[2]);
-        const t1 = 1 - 2 * (ysqr + quat[0] ** 2);
-        out[0] = Math.atan2(t0, t1);
-        // Pitch (y-axis rotation).
-        let t2 = 2 * (quat[3] * quat[1] - quat[2] * quat[0]);
-        t2 = t2 > 1 ? 1 : t2;
-        t2 = t2 < -1 ? -1 : t2;
-        out[1] = Math.asin(t2);
-        // Yaw (z-axis rotation).
-        const t3 = 2 * (quat[3] * quat[2] + quat[0] * quat[1]);
-        const t4 = 1 - 2 * (ysqr + quat[2] ** 2);
-        out[2] = Math.atan2(t3, t4);
-        return out;
-}
-
 
 //Functions for the debug text and sliders
 
@@ -320,7 +329,7 @@ customElements.define("game-view", class extends HTMLElement {
         //nosensors = urlParams.has('nosensors'); //to specify whether or not to use sensors in the URL
                 try {
                 //Initialize sensors
-                orientation_sensor = new AbsOriSensor();        //TODO: use relative orientation sensor
+                orientation_sensor = new OriSensor();
                 orientation_sensor.onreading = () => {
                         roll = orientation_sensor.roll;
                         pitch = orientation_sensor.pitch;
