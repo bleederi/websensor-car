@@ -484,10 +484,10 @@ customElements.define("game-view", class extends HTMLElement {
                 );
                 var road = new Physijs.BoxMesh(geometry, materialRoad, 0);
                 let segmentsLength = segments.length;
+                let texture = this.loader.load('road.png');     //should the callback be used here?
+                let material = new THREE.MeshBasicMaterial( { map: texture } );
                 for (let j=0; j<segmentsLength; j++)
                 {
-                        let texture = this.loader.load('road.png');     //should the callback be used here?
-                        let material = new THREE.MeshBasicMaterial( { map: texture } );
                         let segment = new Physijs.BoxMesh( geometry, material , 0);
                         segment.position.set(segments[j].x,segments[j].y,segments[j].z);
                                 segments[j].bb = new THREE.Box3().setFromObject(segment);     //create bounding box for collision detection             
