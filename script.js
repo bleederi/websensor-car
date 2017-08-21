@@ -331,9 +331,9 @@ customElements.define("game-view", class extends HTMLElement {
                 //Initialize sensors
                 orientation_sensor = new OriSensor();
                 orientation_sensor.onreading = () => {
-                        roll = orientation_sensor.roll;
-                        pitch = orientation_sensor.pitch;
-                        yaw = orientation_sensor.yaw;
+                        roll = orientation_sensor.x;
+                        pitch = orientation_sensor.y;
+                        yaw = orientation_sensor.z;
                 };
                 orientation_sensor.start();
                 }
