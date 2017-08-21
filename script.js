@@ -514,11 +514,11 @@ customElements.define("game-view", class extends HTMLElement {
 
         createObstacles() {     //Create obstacles that the player has to avoid crashing into
                 let segmentsLength = segments.length;
+                let geometry = new THREE.SphereGeometry( 1, 6, 4 );
+                let texture = this.loader.load('road.png');     //should the callback be used here?
+                let material = new THREE.MeshBasicMaterial( { map: texture } );
                 for (let i=1; i<segmentsLength; i++)   //Randomly add obstacles, at most one per segment
                 {
-                        var geometry = new THREE.SphereGeometry( 1, 6, 4 );
-                        let texture = this.loader.load('road.png');     //should the callback be used here?
-                        let material = new THREE.MeshBasicMaterial( { map: texture } );
                         let obstacle = new Physijs.SphereMesh( geometry, material , 0);
                         material.color.set(0xff0000);   //Make the obstacles stand out from the road
                         obstacle.position.z = segments[i].z;
