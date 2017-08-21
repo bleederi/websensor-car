@@ -176,34 +176,13 @@ function getDirection(roll, pitch, yaw, mode="landscape")    //Returns the direc
         switch(screen.orientation.angle) {
                 default:
                 case 0:
-                        if(pitch < 0)
-                        {       
-                                direction = "left";
-                        }
-                        else
-                        {
-                                direction = "right";
-                        }
+                        pitch < 0 ? direction = "left" : direction = "right";
                 break;
-                case 90:      //Landscape mode
-                        if(roll < 0)
-                        {       
-                                direction = "left";
-                        }
-                        else
-                        {
-                                direction = "right";
-                        }
+                case 90:
+                        roll < 0 ? direction = "left" : direction = "right";
                 break;
-                case 270:      //Landscape mode
-                        if(roll < 0)
-                        {       
-                                direction = "left";
-                        }
-                        else
-                        {
-                                direction = "right";
-                        }
+                case 270:
+                        roll < 0 ? direction = "left" : direction = "right";
                 break;
                 }
         }
@@ -218,17 +197,18 @@ function getForce(roll, pitch, yaw, mode="landscape")    //Returns the force the
         }
         else
         {    
-        switch(screen.orientation.angle) {
-                default:
-                case 0:
-                        force = Math.abs(pitch/5);
-                break;
-                case 90:
-                        force = Math.abs(roll/5);
-                break;
-                case 270:
-                        force = Math.abs(roll/5);
-                break;
+                switch(screen.orientation.angle) {
+                        default:
+                        case 0:
+                                force = Math.abs(pitch/5);
+                        break;
+                        case 90:
+                                force = Math.abs(roll/5);
+                        break;
+                        case 270:
+                                force = Math.abs(roll/5);
+                        break;
+                }
         }
         return force;
 }
