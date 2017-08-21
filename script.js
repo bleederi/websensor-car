@@ -335,8 +335,6 @@ customElements.define("game-view", class extends HTMLElement {
                         pitch = orientation_sensor.pitch;
                         yaw = orientation_sensor.yaw;
                 };
-                orientation_sensor.onactivate = () => {
-                };
                 orientation_sensor.start();
                 }
                 catch(err) {
