@@ -489,7 +489,7 @@ customElements.define("game-view", class extends HTMLElement {
                         var material = new THREE.MeshBasicMaterial( { color: "blue"} );
                         let obstacle = new Physijs.SphereMesh( geometry, material , 0);
                         obstacle.position.z = segments[i].z;
-                        obstacle.position.y = -0.5;
+                        obstacle.position.y = -1;
                         obstacle.position.x = segments[i].x - roadWidth/2 + roadWidth * Math.random();
                         obstacle.bb = new THREE.Box3().setFromObject(obstacle); //create bounding box for collision
                         obstacles.push(obstacle);
