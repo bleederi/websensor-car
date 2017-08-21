@@ -485,7 +485,7 @@ customElements.define("game-view", class extends HTMLElement {
                 let segmentsLength = segments.length;
                 for (let i=1; i<segmentsLength; i++)   //Randomly add obstacles, at most one per segment
                 {
-                        var geometry = new THREE.SphereGeometry( 1, 32, 32 );
+                        var geometry = new THREE.SphereGeometry( 1, 8, 6 );
                         var material = new THREE.MeshBasicMaterial( { color: "blue"} );
                         let obstacle = new Physijs.SphereMesh( geometry, material , 0);
                         obstacle.position.z = segments[i].z;
