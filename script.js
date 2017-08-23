@@ -504,11 +504,9 @@ customElements.define("game-view", class extends HTMLElement {
                 );
                 this.carcube = new Physijs.BoxMesh( geometry, material, mass );
                 this.carcube.position.set(0, 0, 0);
-                //this.carcube.bb = new THREE.Box3().setFromObject(this.carcube); //create bounding box for collision detection
-                this.carcube.bb = new THREE.BoundingBoxHelper(this.carcube, 0xff0000);
+                this.carcube.bb = new THREE.BoundingBoxHelper(this.carcube, 0xff0000); //Create bounding box for collision detection
                 this.carcube.bb.update();           
 	        scene.add( this.carcube );
-                scene.add(this.carcube.bb);
                 this.carcube.setDamping(0.1, 0.1);
                 var forcev2 = {x: 0, y: 0, z: -1000*speed};
                 this.carcube.applyCentralImpulse(forcev2);
